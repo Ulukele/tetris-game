@@ -1,11 +1,11 @@
 package tetris.common;
 
-public class Point {
+public class Block {
     private int x;
     private int y;
 
-    public Point() { x = 0; y = 0; }
-    public Point(int x, int y) {
+    public Block() { x = 0; y = 0; }
+    public Block(int x, int y) {
         this.x = x;
         this.y = y;
     }
@@ -26,7 +26,7 @@ public class Point {
      * @param centre -- the point relative to which the rotation occurs.
      * @param directionClockwise -- clockwise (true) or counterclockwise (false).
      */
-    public void rotateOnce(Point centre, boolean directionClockwise) {
+    public void rotateOnce(Block centre, boolean directionClockwise) {
         int xDiff = centre.getX() - x;
         int yDiff = centre.getY() - y;
 

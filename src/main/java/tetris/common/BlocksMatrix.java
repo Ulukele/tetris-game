@@ -2,12 +2,12 @@ package tetris.common;
 
 import java.util.BitSet;
 
-public class PointsMatrix {
+public class BlocksMatrix {
     private final int width;
     private final int height;
     private final BitSet bitSet;
 
-    public PointsMatrix(int width, int height) {
+    public BlocksMatrix(int width, int height) {
         this.width = width;
         this.height = height;
         this.bitSet = new BitSet(width * height);
@@ -54,8 +54,8 @@ public class PointsMatrix {
         bitSet.set(left, right, value);
     }
 
-    public void set(Point point, boolean value) throws IndexOutOfBoundsException {
-        set(point.getX(), point.getY(), value);
+    public void set(Block block, boolean value) throws IndexOutOfBoundsException {
+        set(block.getX(), block.getY(), value);
     }
 
     public boolean get(int x, int y) throws IndexOutOfBoundsException {
@@ -63,8 +63,8 @@ public class PointsMatrix {
         return bitSet.get(y * width + x);
     }
 
-    public boolean get(Point point) {
-        return get(point.getX(), point.getY());
+    public boolean get(Block block) {
+        return get(block.getX(), block.getY());
     }
 
     public int getWidth() {

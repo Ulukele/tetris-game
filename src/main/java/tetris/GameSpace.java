@@ -1,41 +1,41 @@
 package tetris;
 
 import org.jetbrains.annotations.NotNull;
-import tetris.common.Point;
-import tetris.common.PointsMatrix;
+import tetris.common.Block;
+import tetris.common.BlocksMatrix;
 import tetris.figures.Figure;
 
 public class GameSpace {
-    private final PointsMatrix pointsMatrix;
+    private final BlocksMatrix blocksMatrix;
 
     public GameSpace(int width, int height) {
-        pointsMatrix = new PointsMatrix(width, height);
+        blocksMatrix = new BlocksMatrix(width, height);
     }
 
     /**
-     * Check if some point conflicts with
-     * current point's matrix (overlay it)
-     * @param point -- point to check on conflict
-     * @return true if point conflicting with current matrix
+     * Check if some block conflicts with
+     * current block's matrix (overlay it)
+     * @param block -- block to check on conflict
+     * @return true if block conflicting with current matrix
      */
-    private boolean checkPointConflict(@NotNull Point point) {
-        if (point.getX() < 0 || point.getX() >= getWidth()) return true;
-        if (point.getY() < 0 || point.getY() >= getHeight()) return true;
-        return pointsMatrix.get(point);
+    private boolean checkBlockConflict(@NotNull Block block) {
+        if (block.getX() < 0 || block.getX() >= getWidth()) return true;
+        if (block.getY() < 0 || block.getY() >= getHeight()) return true;
+        return blocksMatrix.get(block);
     }
 
     /**
      * Check if bottom rows is full, delete them and shift down
      */
     private void deleteFullRows() {
-        int height = pointsMatrix.getHeight();
+        int height = blocksMatrix.getHeight();
         int fullRows = 0;
         for (int i = 0; i < height; ++i) {
-            if (pointsMatrix.rowIsFull(i)) fullRows++;
+            if (blocksMatrix.rowIsFull(i)) fullRows++;
             else break;
         }
         if (fullRows > 0) {
-            pointsMatrix.shiftDown(fullRows);
+            blocksMatrix.shiftDown(fullRows);
         }
     }
 
@@ -44,24 +44,24 @@ public class GameSpace {
     }
 
     public void clear() {
-        pointsMatrix.clear();
+        blocksMatrix.clear();
     }
 
     public void appendFigure(@NotNull Figure figure) {
-        Point[] blocks = figure.getBlocks();
-        for (final Point block : blocks) {
-            pointsMatrix.set(block, true);
+        Block[] blocks = figure.getBlocks();
+        for (final Block block : blocks) {
+            blocksMatrix.set(block, true);
         }
     }
 
     public boolean checkFigureConflict(@NotNull Figure figure) {
-        Point[] blocks = figure.getBlocks();
-        for (final Point block : blocks) {
-            if (checkPointConflict(block)) return true;
+        Block[] blocks = figure.getBlocks();
+        for (final Block block : blocks) {
+            if (checkBlockConflict(block)) return true;
         }
         return false;
     }
 
-    public int getWidth() { return pointsMatrix.getWidth(); }
-    public int getHeight() { return pointsMatrix.getHeight(); }
+    public int getWidth() { return blocksMatrix.getWidth(); }
+    public int getHeight() { return blocksMatrix.getHeight(); }
 }
