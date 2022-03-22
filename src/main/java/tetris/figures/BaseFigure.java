@@ -1,18 +1,18 @@
 package tetris.figures;
 
 import tetris.common.Block;
+import tetris.common.Coordinate;
 
 public class BaseFigure implements Figure {
-    private Block centre;
+    private final Coordinate centre;
     private final Block[] blocks;
 
-    public BaseFigure(Block[] blocks) { this.blocks = blocks; }
-    public BaseFigure(Block centre, Block[] blocks) { this.centre = centre; this.blocks = blocks; }
+    public BaseFigure(Coordinate centre, Block[] blocks) { this.centre = centre; this.blocks = blocks; }
 
     @Override
     public void setPos(int x, int y) {
-        int xDiff = centre.getX() - x;
-        int yDiff = centre.getY() - y;
+        int xDiff = (int)centre.getX() - x;
+        int yDiff = (int)centre.getY() - y;
         shift(xDiff, yDiff);
     }
 

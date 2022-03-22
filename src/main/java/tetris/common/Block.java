@@ -21,9 +21,9 @@ public class Block {
     /**
      * Rotates point as if it is a part of
      * some bigger object
-     * with centre in some point
+     * with centre in some block
      *
-     * @param centre -- the point relative to which the rotation occurs.
+     * @param centre -- the block relative to which the rotation occurs.
      * @param directionClockwise -- clockwise (true) or counterclockwise (false).
      */
     public void rotateOnce(Block centre, boolean directionClockwise) {
@@ -36,6 +36,26 @@ public class Block {
         } else {
             x = centre.getX() - yDiff;
             y = centre.getY() + xDiff;
+        }
+    }
+
+    /**
+     * Rotates point as if it is a part of
+     * some bigger object
+     * with centre in some coordinate
+     *
+     * @param centre -- the coordinate relative to which the rotation occurs.
+     * @param directionClockwise -- clockwise (true) or counterclockwise (false).
+     */
+    public void rotateOnce(Coordinate centre, boolean directionClockwise) {
+        float xDiff = centre.getX() - x;
+        float yDiff = centre.getY() - y;
+        if (directionClockwise) {
+            x = (int)(centre.getX() + yDiff);
+            y = (int)(centre.getY() - xDiff);
+        } else {
+            x = (int)(centre.getX() - yDiff);
+            y = (int)(centre.getY() + xDiff);
         }
     }
 
