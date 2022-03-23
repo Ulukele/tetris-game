@@ -28,6 +28,19 @@ public class TetrisGame {
 
     public Figure getActiveFigure() { return activeFigure; }
 
+    public void askRotateActiveFigure() {
+        rotateActiveFigure(true);
+        if (gameSpace.checkFigureConflict(activeFigure)) rotateActiveFigure(false);
+    }
+
+    public void askShiftActiveFigure(int x, int y) throws NullPointerException {
+        int xBack = -x;
+        int yBack = -y;
+
+        shiftActiveFigure(x, y);
+        if (gameSpace.checkFigureConflict(activeFigure)) shiftActiveFigure(xBack, yBack);
+    }
+
     private void createNewActiveFigure() {
         activeFigure = StaticFigureFactory.createRandom();
     }
@@ -35,6 +48,11 @@ public class TetrisGame {
     private void shiftActiveFigure(int x, int y) throws NullPointerException {
         if (activeFigure == null) throw new NullPointerException();
         activeFigure.shift(x, y);
+    }
+
+    private void rotateActiveFigure(boolean directionClockwise) throws NullPointerException {
+        if (activeFigure == null) throw new NullPointerException();
+        activeFigure.rotate(directionClockwise);
     }
 
     private void makeActiveFigureFall() throws NullPointerException {

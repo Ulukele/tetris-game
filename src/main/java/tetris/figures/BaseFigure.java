@@ -24,6 +24,13 @@ public class BaseFigure implements Figure {
     }
 
     @Override
+    public void rotate(boolean directionClockwise) {
+        for (final Block block : blocks) {
+            block.rotateOnce(centre, directionClockwise);
+        }
+    }
+
+    @Override
     public void shift(int x, int y) {
         for (final Block block : blocks) {
             block.shift(x, y);
