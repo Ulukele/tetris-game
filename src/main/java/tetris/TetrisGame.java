@@ -1,6 +1,7 @@
 package tetris;
 
 import tetris.figures.Figure;
+import tetris.figures.factory.StaticFigureFactory;
 
 public class TetrisGame {
     private final GameSpace gameSpace;
@@ -14,5 +15,42 @@ public class TetrisGame {
     public void startNewGame() {
         gameSpace.clear();
         score.clear();
+    }
+
+    public void nextTick() {
+        if ( checkActiveFigureFallen() ) {
+            gameSpace.appendFigure(activeFigure);
+            createNewActiveFigure();
+        } else {
+            makeActiveFigureFall();
+        }
+    }
+
+    public Figure getActiveFigure() { return activeFigure; }
+
+    private void createNewActiveFigure() {
+        activeFigure = StaticFigureFactory.createRandom();
+    }
+
+    private void shiftActiveFigure(int x, int y) throws NullPointerException {
+        if (activeFigure == null) throw new NullPointerException();
+        activeFigure.shift(x, y);
+    }
+
+    private void makeActiveFigureFall() throws NullPointerException {
+        if (activeFigure == null) throw new NullPointerException();
+        activeFigure.shift(0, -1);
+    }
+
+    private boolean checkActiveFigureFallen() throws NullPointerException {
+        if (activeFigure == null) throw new NullPointerException();
+
+        // if bottom of figure touches game space -- figure fallen
+        // touching bottom means <=> if shift down it conflicts with game space
+        activeFigure.shift(0, -1);
+        boolean fallen = gameSpace.checkFigureConflict(activeFigure);
+        activeFigure.shift(0, 1);
+
+        return fallen;
     }
 }
