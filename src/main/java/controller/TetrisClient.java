@@ -1,6 +1,5 @@
 package controller;
 
-import Exceptions.UnknownCommand;
 import tetris.TetrisGame;
 
 public class TetrisClient implements IClient {
