@@ -15,6 +15,7 @@ public class TetrisGame {
     public void startNewGame() {
         gameSpace.clear();
         score.clear();
+        createNewActiveFigure();
     }
 
     public void nextTick() {
