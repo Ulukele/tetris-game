@@ -4,7 +4,11 @@ import tetris.TetrisGame;
 
 public class TetrisClient implements IClient {
 
-    private TetrisGame tetrisGame;
+    private final TetrisGame tetrisGame;
+
+    public TetrisClient(TetrisGame tetrisGame) {
+        this.tetrisGame = tetrisGame;
+    }
 
     @Override
     public void execute(Command command) {

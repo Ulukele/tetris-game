@@ -5,6 +5,8 @@ import tetris.common.Block;
 import tetris.common.BlocksMatrix;
 import tetris.figures.Figure;
 
+import java.util.BitSet;
+
 public class GameSpace {
     private final BlocksMatrix blocksMatrix;
 
@@ -64,4 +66,7 @@ public class GameSpace {
 
     public int getWidth() { return blocksMatrix.getWidth(); }
     public int getHeight() { return blocksMatrix.getHeight(); }
+    public BlocksMatrix getBlocksMatrix() {
+        return blocksMatrix;
+    }
 }

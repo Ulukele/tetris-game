@@ -1,9 +1,10 @@
 package common;
 
 import java.util.Vector;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Publisher implements IPublisher {
-    Vector<ISubscriber> subscribers = new Vector<>();
+    CopyOnWriteArrayList<ISubscriber> subscribers = new CopyOnWriteArrayList<>(); // threadsafe
 
     @Override
     public void addSubscriber(ISubscriber subscriber) {

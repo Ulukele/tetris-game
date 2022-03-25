@@ -72,4 +72,12 @@ public class TetrisGame {
 
         return fallen;
     }
+
+    public GameSpace getGameSpace() {
+        return gameSpace;
+    }
+
+    public Score getScore() {
+        return score;
+    }
 }
