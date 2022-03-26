@@ -1,12 +1,13 @@
-package view;
+package common;
 
 import Exceptions.LoadConfigurationException;
-import common.PropertiesParser;
+import tetris.GameSpace;
+import tetris.Score;
 
 import java.io.IOException;
 import java.util.Properties;
 
-public class GUIConfiguration {
+public class TetrisConfiguration {
     private PropertiesParser propertiesParser;
 
     private String filename;
@@ -17,16 +18,20 @@ public class GUIConfiguration {
     private int blocksYCount;
     private int blockSize;
     private int topSize;
+    private int padding;
 
-    public GUIConfiguration(String filename) {
+    private GameSpace gameSpace;
+    private Score score;
+
+    public TetrisConfiguration(String filename) {
         this.filename = filename;
     }
 
-    public GUIConfiguration(Properties configProperties)  {
+    public TetrisConfiguration(Properties configProperties)  {
         propertiesParser = new PropertiesParser(configProperties);
     }
 
-    public GUIConfiguration() {}
+    public TetrisConfiguration() {}
 
     public void configure() throws LoadConfigurationException {
         if (filename != null) {
@@ -47,7 +52,6 @@ public class GUIConfiguration {
     }
 
     private void calculateConfiguration() {
-        int padding = 20;
         width = blocksXCount * blockSize + padding * 2;
         height = blocksYCount * blockSize + padding * 2 + topSize;
     }
@@ -57,6 +61,7 @@ public class GUIConfiguration {
         blocksYCount = 20;
         blockSize = 40;
         topSize = 50;
+        padding = 20;
         calculateConfiguration();
     }
 
@@ -66,6 +71,7 @@ public class GUIConfiguration {
             blocksYCount = propertiesParser.getInteger("BLOCKS_Y_COUNT");
             blockSize = propertiesParser.getInteger("BLOCK_SIZE");
             topSize = propertiesParser.getInteger("TOP_SIZE");
+            padding = propertiesParser.getInteger("PADDING");
         } catch (NullPointerException | NumberFormatException exception) {
             configureFromDefaults();
             throw new LoadConfigurationException("Unable to parse configuration file, use defaults");
@@ -95,5 +101,23 @@ public class GUIConfiguration {
 
     public int getTopSize() {
         return topSize;
+    }
+
+    public int getPadding() {
+        return padding;
+    }
+
+    public GameSpace getGameSpace() {
+        if (gameSpace == null) {
+            gameSpace = new GameSpace(blocksXCount, blocksYCount);
+        }
+        return gameSpace;
+    }
+
+    public Score getScore() {
+        if (score == null) {
+            score = new Score();
+        }
+        return score;
     }
 }

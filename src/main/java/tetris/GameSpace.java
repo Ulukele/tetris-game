@@ -5,10 +5,9 @@ import tetris.common.Block;
 import tetris.common.BlocksMatrix;
 import tetris.figures.Figure;
 
-import java.util.BitSet;
-
 public class GameSpace {
     private final BlocksMatrix blocksMatrix;
+    private Figure activeFigure; // TODO: move active figure to that class, work with figure here
 
     public GameSpace(int width, int height) {
         blocksMatrix = new BlocksMatrix(width, height);

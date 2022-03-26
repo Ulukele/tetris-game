@@ -1,8 +1,11 @@
 package tetris.common;
 
+import common.Publisher;
+
+import javax.swing.*;
 import java.util.BitSet;
 
-public class BlocksMatrix {
+public class BlocksMatrix extends Publisher {
     private final int width;
     private final int height;
     private final BitSet bitSet;
@@ -44,7 +47,12 @@ public class BlocksMatrix {
     public void set(int x, int y, boolean value) throws IndexOutOfBoundsException {
         if (x > width || x < 0 || y > height || y < 0) throw new IndexOutOfBoundsException();
         int index = y * width + x;
-        bitSet.set(index, value);
+        // We need to change bitSet in UI thread
+        // because BitSet not threadsafe
+//        SwingUtilities.invokeLater(() -> {
+            bitSet.set(index, value);
+            publishNotify();
+//        });
     }
 
     public void set(int y, boolean value) throws IndexOutOfBoundsException {

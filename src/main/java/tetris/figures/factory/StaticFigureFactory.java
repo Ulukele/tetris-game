@@ -11,6 +11,7 @@ public class StaticFigureFactory {
     private static final JFigureCreator jFigureCreator = new JFigureCreator();
     private static final SFigureCreator sFigureCreator = new SFigureCreator();
     private static final ZFigureCreator zFigureCreator = new ZFigureCreator();
+    private static final TFigureCreator tFigureCreator = new TFigureCreator();
 
     public static Figure create(int figureId) throws IndexOutOfBoundsException {
         if (figureId < 0 || figureId > 6) {
@@ -19,10 +20,11 @@ public class StaticFigureFactory {
         return switch (figureId) {
             case (0) -> oFigureCreator.create();
             case (1) -> iFigureCreator.create();
-            case (3) -> lFigureCreator.create();
-            case (4) -> jFigureCreator.create();
-            case (5) -> sFigureCreator.create();
-            case (6) -> zFigureCreator.create();
+            case (2) -> lFigureCreator.create();
+            case (3) -> jFigureCreator.create();
+            case (4) -> sFigureCreator.create();
+            case (5) -> zFigureCreator.create();
+            case (6) -> tFigureCreator.create();
             default -> null;
         };
     }
@@ -33,7 +35,7 @@ public class StaticFigureFactory {
 
     public static Figure createRandom() {
         Random random = new Random();
-        int figureId = random.nextInt() % getCreatorsCount();
+        int figureId = random.nextInt(getCreatorsCount());
         return create(figureId);
     }
 }

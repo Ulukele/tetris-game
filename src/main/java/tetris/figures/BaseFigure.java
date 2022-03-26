@@ -1,9 +1,10 @@
 package tetris.figures;
 
+import common.Publisher;
 import tetris.common.Block;
 import tetris.common.Coordinate;
 
-public class BaseFigure implements Figure {
+public class BaseFigure extends Publisher implements Figure {
     private final Coordinate centre;
     private final Block[] blocks;
 
@@ -11,8 +12,8 @@ public class BaseFigure implements Figure {
 
     @Override
     public void setPos(int x, int y) {
-        int xDiff = (int)centre.getX() - x;
-        int yDiff = (int)centre.getY() - y;
+        int xDiff = x - (int)centre.getX();
+        int yDiff = y - (int)centre.getY();
         shift(xDiff, yDiff);
     }
 

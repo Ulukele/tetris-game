@@ -5,11 +5,12 @@ import tetris.figures.factory.StaticFigureFactory;
 
 public class TetrisGame {
     private final GameSpace gameSpace;
-    private final Score score = new Score(0);
-    private Figure activeFigure = null;
+    private final Score score;
+    private Figure activeFigure;
 
-    public TetrisGame(GameSpace gameSpace) {
+    public TetrisGame(GameSpace gameSpace, Score score) {
         this.gameSpace = gameSpace;
+        this.score = score;
     }
 
     public void startNewGame() {
@@ -44,6 +45,8 @@ public class TetrisGame {
 
     private void createNewActiveFigure() {
         activeFigure = StaticFigureFactory.createRandom();
+        // TODO: place figure correct
+        activeFigure.setPos(gameSpace.getWidth() / 2, gameSpace.getHeight() - 5);
     }
 
     private void shiftActiveFigure(int x, int y) throws NullPointerException {

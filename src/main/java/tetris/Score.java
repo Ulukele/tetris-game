@@ -1,6 +1,8 @@
 package tetris;
 
-public class Score {
+import common.Publisher;
+
+public class Score extends Publisher {
     private int score;
 
     public Score() { score = 0; }

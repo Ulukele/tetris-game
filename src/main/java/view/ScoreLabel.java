@@ -1,6 +1,7 @@
 package view;
 
 import common.ISubscriber;
+import org.jetbrains.annotations.NotNull;
 import tetris.Score;
 
 import javax.swing.*;
@@ -11,6 +12,14 @@ public class ScoreLabel extends JLabel implements ISubscriber {
 
     ScoreLabel() {
         super("Score: ");
+    }
+
+    public void setScoreModel(@NotNull Score score) {
+        if (this.score != null) {
+            this.score.removeSubscriber(this);
+        }
+        this.score = score;
+        score.addSubscriber(this);
     }
 
     @Override
