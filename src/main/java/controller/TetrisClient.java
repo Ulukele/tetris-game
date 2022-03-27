@@ -1,26 +1,25 @@
 package controller;
 
-import tetris.TetrisGame;
+import tetris.TetrisEngine;
 
 public class TetrisClient implements IClient {
 
-    private final TetrisGame tetrisGame;
+    private final TetrisEngine tetrisEngine;
 
-    public TetrisClient(TetrisGame tetrisGame) {
-        this.tetrisGame = tetrisGame;
+    public TetrisClient(TetrisEngine tetrisEngine) {
+        this.tetrisEngine = tetrisEngine;
     }
 
     @Override
     public void execute(Command command) {
         if (command == Command.Down) {
-            tetrisGame.askShiftActiveFigure(0, -1);
-        }  else if (command == Command.Left) {
-            tetrisGame.askShiftActiveFigure(-1, 0);
+            tetrisEngine.askShiftActiveFigure(0, -1);
+        } else if (command == Command.Left) {
+            tetrisEngine.askShiftActiveFigure(-1, 0);
         } else if (command == Command.Right) {
-            tetrisGame.askShiftActiveFigure(1, 0);
+            tetrisEngine.askShiftActiveFigure(1, 0);
         } else if (command == Command.Rotate) {
-            tetrisGame.askRotateActiveFigure();
+            tetrisEngine.askRotateActiveFigure();
         }
-
     }
 }

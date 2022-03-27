@@ -3,6 +3,7 @@ package common;
 import Exceptions.LoadConfigurationException;
 import tetris.GameSpace;
 import tetris.Score;
+import tetris.TetrisEngine;
 
 import java.io.IOException;
 import java.util.Properties;
@@ -22,6 +23,7 @@ public class TetrisConfiguration {
 
     private GameSpace gameSpace;
     private Score score;
+    private TetrisEngine tetrisEngine;
 
     public TetrisConfiguration(String filename) {
         this.filename = filename;
@@ -34,6 +36,7 @@ public class TetrisConfiguration {
     public TetrisConfiguration() {}
 
     public void configure() throws LoadConfigurationException {
+        // Configure parameters
         if (filename != null) {
             try {
                 propertiesParser = new PropertiesParser(filename);
@@ -119,5 +122,12 @@ public class TetrisConfiguration {
             score = new Score();
         }
         return score;
+    }
+
+    public TetrisEngine getTetrisGame() {
+        if (tetrisEngine == null) {
+            tetrisEngine = new TetrisEngine(getGameSpace(), getScore());
+        }
+        return tetrisEngine;
     }
 }

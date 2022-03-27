@@ -1,19 +1,18 @@
-package tetris.common;
+package tetris;
 
-import common.Publisher;
+import org.jetbrains.annotations.NotNull;
+import tetris.common.Block;
 
-import javax.swing.*;
-import java.util.BitSet;
-
-public class BlocksMatrix extends Publisher {
+public class BlocksMatrix {
     private final int width;
     private final int height;
-    private final BitSet bitSet;
+    private final boolean[][] bitMatrix;
 
     public BlocksMatrix(int width, int height) {
         this.width = width;
         this.height = height;
-        this.bitSet = new BitSet(width * height);
+        bitMatrix = new boolean[height][width];
+        clear();
     }
 
     public void shiftDown(int shiftValue) throws IndexOutOfBoundsException {
@@ -41,38 +40,38 @@ public class BlocksMatrix extends Publisher {
     }
 
     public void clear() {
-        bitSet.clear();
+        for (int i = 0; i < height; ++i) {
+            for (int j = 0; j < width; ++j) {
+                bitMatrix[i][j] = false;
+            }
+        }
     }
 
     public void set(int x, int y, boolean value) throws IndexOutOfBoundsException {
         if (x > width || x < 0 || y > height || y < 0) throw new IndexOutOfBoundsException();
-        int index = y * width + x;
-        // We need to change bitSet in UI thread
-        // because BitSet not threadsafe
-//        SwingUtilities.invokeLater(() -> {
-            bitSet.set(index, value);
-            publishNotify();
-//        });
+        bitMatrix[y][x] = value;
     }
 
     public void set(int y, boolean value) throws IndexOutOfBoundsException {
         if (y > height || y < 0) throw new IndexOutOfBoundsException();
-        int left = y * width;
-        int right = (y + 1) * width - 1;
-        bitSet.set(left, right, value);
+        for (int i = 0; i < width; ++i) bitMatrix[y][i] = value;
     }
 
-    public void set(Block block, boolean value) throws IndexOutOfBoundsException {
+    public void set(@NotNull Block block, boolean value) throws IndexOutOfBoundsException {
         set(block.getX(), block.getY(), value);
     }
 
     public boolean get(int x, int y) throws IndexOutOfBoundsException {
         if (x > width || x < 0 || y > height || y < 0) throw new IndexOutOfBoundsException();
-        return bitSet.get(y * width + x);
+        return bitMatrix[y][x];
     }
 
-    public boolean get(Block block) {
+    public boolean get(@NotNull Block block) {
         return get(block.getX(), block.getY());
+    }
+
+    public boolean[][] getBitMatrix() {
+        return bitMatrix;
     }
 
     public int getWidth() {

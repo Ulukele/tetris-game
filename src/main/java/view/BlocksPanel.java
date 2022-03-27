@@ -1,10 +1,7 @@
 package view;
 
 import common.ISubscriber;
-import org.jetbrains.annotations.NotNull;
-import tetris.common.BlocksMatrix;
-import tetris.figures.BaseFigure;
-import tetris.figures.Figure;
+import common.Model;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,8 +12,7 @@ public class BlocksPanel extends JPanel implements ISubscriber {
     private final int blockSize;
     private final BlockView[][] blocks;
 
-    private BlocksMatrix blocksMatrixModel;
-    private Figure figureModel;
+    private Model<boolean[][]> blocksMatrixModel;
 
     private final Color emptyColor = new Color(50, 50, 50);
     private final Color filledColor = new Color(100, 50, 100);
@@ -27,42 +23,32 @@ public class BlocksPanel extends JPanel implements ISubscriber {
         this.blocksY = blocksY;
         this.blockSize = blockSize;
 
-        blocks = new BlockView[blocksX][blocksY];
-        for(int j = 0; j < blocksY; ++j) {
+        blocks = new BlockView[blocksY][blocksX];
+        for(int j = blocksY - 1; j >= 0; --j) {
             for (int i = 0; i < blocksX; ++i) {
-                blocks[i][j] = new BlockView(blockSize, emptyColor);
-                this.add(blocks[i][j]);
+                blocks[j][i] = new BlockView(blockSize, emptyColor);
+                this.add(blocks[j][i]);
             }
         }
     }
 
-    public void setBlocksMatrixModel(@NotNull BlocksMatrix blocksMatrixModel) {
-        if (this.blocksMatrixModel != null) {
-            this.blocksMatrixModel.removeSubscriber(this);
-        }
+    public void setBlocksMatrixModel(Model<boolean[][]> blocksMatrixModel) {
         this.blocksMatrixModel = blocksMatrixModel;
         blocksMatrixModel.addSubscriber(this);
     }
 
-    public void setFigureModel(@NotNull BaseFigure figureModel) {
-        if (this.figureModel != null) {
-            this.figureModel.removeSubscriber(this);
-        }
-        this.figureModel = figureModel;
-        figureModel.addSubscriber(this);
-    }
-
     @Override
     public void reactOnNotify() {
-        for (int y = 0; y < blocksY; ++y) {
-            for (int x = 0; x < blocksX; ++x) {
-                boolean hasBlock = blocksMatrixModel.get(x, y);
-                if (hasBlock) {
-                    blocks[x][y].setColor(filledColor);
+        boolean[][] blocksMatrix = blocksMatrixModel.getData();
+        for (int x = 0; x < blocksX; ++x) {
+            for (int y = 0; y < blocksY; ++y) {
+                if (blocksMatrix[y][x]) {
+                    blocks[y][x].setColor(filledColor);
                 } else {
-                    blocks[x][y].setColor(emptyColor);
+                    blocks[y][x].setColor(emptyColor);
                 }
             }
         }
+        this.repaint();
     }
 }

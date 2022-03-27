@@ -17,7 +17,7 @@ public class MainTetrisView extends JFrame {
 
         // Base configuration of main frame
         this.configuration = configuration;
-        this.setBounds(100, 100, configuration.getWidth(), configuration.getHeight());
+        this.setBounds(500, 100, configuration.getWidth(), configuration.getHeight());
         this.setResizable(false);
         this.setBackground(new Color(50, 50, 50));
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -55,7 +55,6 @@ public class MainTetrisView extends JFrame {
     }
 
     private void connectModels() {
-        blocksMatrix.setBlocksMatrixModel(configuration.getGameSpace().getBlocksMatrix());
-        scoreLabel.setScoreModel(configuration.getScore());
+        blocksMatrix.setBlocksMatrixModel(configuration.getGameSpace());
     }
 }

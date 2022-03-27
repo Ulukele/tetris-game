@@ -1,10 +1,9 @@
 import Exceptions.LoadConfigurationException;
-import tetris.GameSpace;
-import tetris.Score;
-import tetris.TetrisGame;
+import controller.TetrisClient;
+import tetris.TetrisEngine;
 import common.TetrisConfiguration;
-import tetris.common.Block;
 import view.MainTetrisView;
+import view.TetrisKeyListener;
 
 import javax.swing.*;
 import java.util.Timer;
@@ -22,14 +21,28 @@ public class Main {
             configurationException.printStackTrace();
         }
 
-        // Get game instances
-        GameSpace gameSpace = tetrisConfiguration.getGameSpace();
-        Score score = tetrisConfiguration.getScore();
-        TetrisGame tetrisGame = new TetrisGame(gameSpace, score);
-
+        // Get game instance
+        TetrisEngine tetrisEngine = tetrisConfiguration.getTetrisGame();
 
         // Start GUI
         MainTetrisView app = new MainTetrisView(tetrisConfiguration);
         app.setVisible(true);
+
+        // Start client
+        TetrisClient tetrisClient = new TetrisClient(tetrisEngine);
+        TetrisKeyListener tetrisKeyListener = new TetrisKeyListener(tetrisClient);
+        app.addKeyListener(tetrisKeyListener);
+
+        // Launch game
+        tetrisEngine.startNewGame();
+
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                tetrisEngine.nextTick();
+            }
+        };
+        Timer timer = new Timer();
+        timer.schedule(timerTask, 0, 800);
     }
 }

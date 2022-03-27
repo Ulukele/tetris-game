@@ -1,10 +1,9 @@
 package tetris.figures;
 
-import common.Publisher;
 import tetris.common.Block;
 import tetris.common.Coordinate;
 
-public class BaseFigure extends Publisher implements Figure {
+public class BaseFigure implements Figure {
     private final Coordinate centre;
     private final Block[] blocks;
 
