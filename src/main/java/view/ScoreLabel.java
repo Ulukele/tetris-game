@@ -1,29 +1,29 @@
 package view;
 
 import common.ISubscriber;
+import common.Model;
 import org.jetbrains.annotations.NotNull;
-import tetris.Score;
 
 import javax.swing.*;
 
 public class ScoreLabel extends JLabel implements ISubscriber {
 
-    private Score score;
+    private Model<Integer> scoreModel;
 
     ScoreLabel() {
         super("Score: ");
     }
 
-    public void setScoreModel(@NotNull Score score) {
-        if (this.score != null) {
-            this.score.removeSubscriber(this);
+    public void setScoreModel(@NotNull Model<Integer> scoreModel) {
+        if (this.scoreModel != null) {
+            this.scoreModel.removeSubscriber(this);
         }
-        this.score = score;
-        score.addSubscriber(this);
+        this.scoreModel = scoreModel;
+        scoreModel.addSubscriber(this);
     }
 
     @Override
     public void reactOnNotify() {
-        this.setText("Score: " + score.getScore());
+        this.setText("Score: " + scoreModel.getData());
     }
 }

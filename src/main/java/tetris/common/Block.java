@@ -3,6 +3,7 @@ package tetris.common;
 public class Block {
     private int x;
     private int y;
+    private BlockColor color;
 
     public Block() { x = 0; y = 0; }
     public Block(int x, int y) {
@@ -57,6 +58,14 @@ public class Block {
             x = (int)(centre.getX() - yDiff);
             y = (int)(centre.getY() + xDiff);
         }
+    }
+
+    public void setColor(BlockColor color) {
+        this.color = color;
+    }
+
+    public BlockColor getColor() {
+        return color;
     }
 
 }

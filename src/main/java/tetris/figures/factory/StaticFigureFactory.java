@@ -1,5 +1,6 @@
 package tetris.figures.factory;
 
+import tetris.common.BlockColor;
 import tetris.figures.Figure;
 
 import java.util.Random;
@@ -13,18 +14,18 @@ public class StaticFigureFactory {
     private static final ZFigureCreator zFigureCreator = new ZFigureCreator();
     private static final TFigureCreator tFigureCreator = new TFigureCreator();
 
-    public static Figure create(int figureId) throws IndexOutOfBoundsException {
+    public static Figure create(int figureId, BlockColor color) throws IndexOutOfBoundsException {
         if (figureId < 0 || figureId > 6) {
             throw new IndexOutOfBoundsException();
         }
         return switch (figureId) {
-            case (0) -> oFigureCreator.create();
-            case (1) -> iFigureCreator.create();
-            case (2) -> lFigureCreator.create();
-            case (3) -> jFigureCreator.create();
-            case (4) -> sFigureCreator.create();
-            case (5) -> zFigureCreator.create();
-            case (6) -> tFigureCreator.create();
+            case (0) -> oFigureCreator.create(color);
+            case (1) -> iFigureCreator.create(color);
+            case (2) -> lFigureCreator.create(color);
+            case (3) -> jFigureCreator.create(color);
+            case (4) -> sFigureCreator.create(color);
+            case (5) -> zFigureCreator.create(color);
+            case (6) -> tFigureCreator.create(color);
             default -> null;
         };
     }
@@ -35,7 +36,9 @@ public class StaticFigureFactory {
 
     public static Figure createRandom() {
         Random random = new Random();
+        BlockColor[] colors = BlockColor.values();
         int figureId = random.nextInt(getCreatorsCount());
-        return create(figureId);
+        BlockColor color = colors[ random.nextInt(colors.length) ];
+        return create(figureId, color);
     }
 }

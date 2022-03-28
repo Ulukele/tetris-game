@@ -2,33 +2,55 @@ package tetris;
 
 import org.jetbrains.annotations.NotNull;
 import tetris.common.Block;
+import tetris.common.BlockColor;
+import tetris.figures.Figure;
 
 public class BlocksMatrix {
     private final int width;
     private final int height;
-    private final boolean[][] bitMatrix;
+    private final BlockColor[][] colorsMatrix;
 
     public BlocksMatrix(int width, int height) {
         this.width = width;
         this.height = height;
-        bitMatrix = new boolean[height][width];
+        colorsMatrix = new BlockColor[height][width];
         clear();
     }
 
-    public void shiftDown(int shiftValue) throws IndexOutOfBoundsException {
-        if (shiftValue > height) throw new IndexOutOfBoundsException();
+    public boolean isBLockInside(@NotNull Block block) {
+        if (block.getY() < 0 || block.getY() >= getHeight()) return false;
+        if (block.getX() < 0 || block.getX() >= getWidth()) return false;
+        return true;
+    }
 
-        int top = height - shiftValue;
-        // Shift from [height, shiftValue] to [top, 0]
-        for (int y = 0; y < top; ++y) {
-            for (int x = 0; x < width; ++x) {
-                boolean value = get(x, y + shiftValue);
-                set(x, y, value);
+    public void appendFigure(@NotNull Figure figure) {
+        for (final Block block : figure.getBlocks()) {
+            if (isBLockInside(block)) {
+                set(block);
             }
         }
-        // Clear [height, top]
+    }
+
+    /**
+     * removes rows from yMin to yMax
+     * @param yMin
+     * @param yMax
+     * @throws IndexOutOfBoundsException
+     */
+    public void removeRows(int yMin, int yMax) throws IndexOutOfBoundsException {
+        if (yMin < 0 || yMax >= height || yMin > yMax) throw new IndexOutOfBoundsException();
+
+        int shiftValue = (yMax - yMin + 1);
+        int top = height - shiftValue;
+
+        for (int y = yMin; y < top; ++y) {
+            for (int x = 0; x < width; ++x) {
+                copy(x, y + shiftValue, x, y);
+            }
+        }
+
         for (int y = top; y < height; ++y) {
-            set(y, false);
+            for (int i = 0; i < width; ++i) set(i, y, null);
         }
     }
 
@@ -42,37 +64,39 @@ public class BlocksMatrix {
     public void clear() {
         for (int i = 0; i < height; ++i) {
             for (int j = 0; j < width; ++j) {
-                bitMatrix[i][j] = false;
+                colorsMatrix[i][j] = null;
             }
         }
     }
 
-    public void set(int x, int y, boolean value) throws IndexOutOfBoundsException {
+    private void copy(int xSrc, int ySrc, int xDst, int yDst) {
+        BlockColor color = getColor(xSrc, ySrc);
+        set(xDst, yDst, color);
+    }
+
+    private void set(int x, int y, BlockColor color) throws IndexOutOfBoundsException {
         if (x > width || x < 0 || y > height || y < 0) throw new IndexOutOfBoundsException();
-        bitMatrix[y][x] = value;
+        colorsMatrix[y][x] = color;
     }
 
-    public void set(int y, boolean value) throws IndexOutOfBoundsException {
-        if (y > height || y < 0) throw new IndexOutOfBoundsException();
-        for (int i = 0; i < width; ++i) bitMatrix[y][i] = value;
-    }
-
-    public void set(@NotNull Block block, boolean value) throws IndexOutOfBoundsException {
-        set(block.getX(), block.getY(), value);
+    private void set(@NotNull Block block) throws IndexOutOfBoundsException {
+        set(block.getX(), block.getY(), block.getColor());
     }
 
     public boolean get(int x, int y) throws IndexOutOfBoundsException {
         if (x > width || x < 0 || y > height || y < 0) throw new IndexOutOfBoundsException();
-        return bitMatrix[y][x];
+        return colorsMatrix[y][x] != null;
+    }
+    public BlockColor getColor(int x, int y) throws IndexOutOfBoundsException {
+        if (x > width || x < 0 || y > height || y < 0) throw new IndexOutOfBoundsException();
+        return colorsMatrix[y][x];
     }
 
     public boolean get(@NotNull Block block) {
         return get(block.getX(), block.getY());
     }
 
-    public boolean[][] getBitMatrix() {
-        return bitMatrix;
-    }
+    public BlockColor[][] getColorsMatrix() { return colorsMatrix; }
 
     public int getWidth() {
         return width;

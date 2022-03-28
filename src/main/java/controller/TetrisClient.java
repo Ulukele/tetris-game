@@ -20,6 +20,8 @@ public class TetrisClient implements IClient {
             tetrisEngine.askShiftActiveFigure(1, 0);
         } else if (command == Command.Rotate) {
             tetrisEngine.askRotateActiveFigure();
+        } else if (command == Command.Menu) {
+            tetrisEngine.pause();
         }
     }
 }

@@ -22,6 +22,7 @@ public class TetrisKeyListener implements KeyListener {
             case ('s') -> tetrisClient.execute(Command.Down);
             case ('d') -> tetrisClient.execute(Command.Right);
             case (' ') -> tetrisClient.execute(Command.Rotate);
+            case ('\n') -> tetrisClient.execute(Command.Menu);
         }
     }
 

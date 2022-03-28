@@ -35,14 +35,6 @@ public class Main {
 
         // Launch game
         tetrisEngine.startNewGame();
-
-        TimerTask timerTask = new TimerTask() {
-            @Override
-            public void run() {
-                tetrisEngine.nextTick();
-            }
-        };
-        Timer timer = new Timer();
-        timer.schedule(timerTask, 0, 800);
+        
     }
 }

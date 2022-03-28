@@ -1,19 +1,20 @@
 package tetris;
 
+import Exceptions.ActiveFigureException;
 import common.Model;
 import common.Publisher;
 import org.jetbrains.annotations.NotNull;
 import tetris.common.Block;
+import tetris.common.BlockColor;
 import tetris.figures.Figure;
 
-import java.sql.Array;
 
 /**
  * Class that contains all necessary game instances
  * responsible for the consistency of the gameplay.
  * Provides guarantees of compatibility of all game entities.
  */
-public class GameSpace extends Publisher implements Model<boolean[][]> {
+public class GameSpace extends Publisher implements Model<BlockColor[][]> {
     private final BlocksMatrix blocksMatrix;
     private final ActiveFigure activeFigure;
 
@@ -32,12 +33,6 @@ public class GameSpace extends Publisher implements Model<boolean[][]> {
     private void rotateActiveFigure() {
         activeFigure.getActiveFigure().rotate();
         publishNotify();
-    }
-
-    private boolean checkBlockInsideMatrix(@NotNull Block block) {
-        if (block.getY() < 0 || block.getY() >= blocksMatrix.getHeight()) return false;
-        if (block.getX() < 0 || block.getX() >= blocksMatrix.getWidth()) return false;
-        return true;
     }
 
     private boolean checkBlockAndBlocksMatrixConflict(@NotNull Block block) {
@@ -69,15 +64,13 @@ public class GameSpace extends Publisher implements Model<boolean[][]> {
         );
     }
 
-    private void spawnNewActiveFigure() {
-        for (final Block block : activeFigure.getActiveFigure().getBlocks()) {
-            if (checkBlockInsideMatrix(block)) {
-                blocksMatrix.set(block.getX(), block.getY(), true);
-            }
-        }
+    private void spawnNewActiveFigure() throws ActiveFigureException {
+        blocksMatrix.appendFigure(activeFigure.getActiveFigure());
         activeFigure.changeActiveFigure();
         setActiveFigureStartPosition();
+        boolean conflicts = checkFigureAndBlocksMatrixConflict();
         publishNotify();
+        if (conflicts) throw new ActiveFigureException("Conflict with matrix");
     }
 
     public void askShiftFigure(int x, int y) {
@@ -100,17 +93,26 @@ public class GameSpace extends Publisher implements Model<boolean[][]> {
 
     public int deleteFilledRows() {
         int filledRows = 0;
-        for (int y = 0; y < blocksMatrix.getHeight(); ++y) {
+        int filledInARow = 0;
+        int height = blocksMatrix.getHeight();
+        for (int y = 0; y < height; ++y) {
             if (blocksMatrix.rowIsFull(y)) {
-                filledRows++;
+                filledInARow++;
+            } else if (filledInARow > 0) {
+                filledRows += filledInARow;
+                blocksMatrix.removeRows(y - filledInARow, y - 1);
+                filledInARow = 0;
             }
         }
-        blocksMatrix.shiftDown(filledRows);
+        if (filledInARow > 0) {
+            filledRows += filledInARow;
+            blocksMatrix.removeRows(height - filledInARow, height - 1);
+        }
         if (filledRows > 0) publishNotify();
         return filledRows;
     }
 
-    public void fallActiveFigure() {
+    public void fallActiveFigure() throws ActiveFigureException {
         if (activeFigureFallen()) {
             spawnNewActiveFigure();
         } else {
@@ -123,17 +125,17 @@ public class GameSpace extends Publisher implements Model<boolean[][]> {
         blocksMatrix.clear();
     }
 
-    public boolean[][] getBlocks() {
-        boolean[][] instance = blocksMatrix.getBitMatrix();
-        boolean[][] copy = new boolean[blocksMatrix.getHeight()][blocksMatrix.getWidth()];
+    public BlockColor[][] getBlocksColors() {
+        BlockColor[][] instance = blocksMatrix.getColorsMatrix();
+        BlockColor[][] copy = new BlockColor[blocksMatrix.getHeight()][blocksMatrix.getWidth()];
         for (int i = 0; i < blocksMatrix.getHeight(); ++i) {
             for (int j = 0; j < blocksMatrix.getWidth(); ++j) {
                 copy[i][j] = instance[i][j];
             }
         }
         for (final Block block : activeFigure.getActiveFigure().getBlocks()) {
-            if (checkBlockInsideMatrix(block)) {
-                copy[block.getY()][block.getX()] = true;
+            if (blocksMatrix.isBLockInside(block)) {
+                copy[block.getY()][block.getX()] = block.getColor();
             }
         }
         return copy;
@@ -148,7 +150,7 @@ public class GameSpace extends Publisher implements Model<boolean[][]> {
     }
 
     @Override
-    public boolean[][] getData() {
-        return getBlocks();
+    public BlockColor[][] getData() {
+        return getBlocksColors();
     }
 }

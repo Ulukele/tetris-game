@@ -56,5 +56,6 @@ public class MainTetrisView extends JFrame {
 
     private void connectModels() {
         blocksMatrix.setBlocksMatrixModel(configuration.getGameSpace());
+        scoreLabel.setScoreModel(configuration.getScore());
     }
 }
