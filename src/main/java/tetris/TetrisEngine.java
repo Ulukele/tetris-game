@@ -13,6 +13,7 @@ import java.util.TimerTask;
 public class TetrisEngine {
     private final GameSpace gameSpace;
     private final Score score;
+    private final GameState state;
     private final Timer timer = new Timer();
     private final TimerTask timerTask = new TimerTask() {
         @Override
@@ -21,23 +22,26 @@ public class TetrisEngine {
         }
     };
 
-    public TetrisEngine(GameSpace gameSpace, Score score) {
+    public TetrisEngine(GameSpace gameSpace, Score score, GameState gameState) {
         this.gameSpace = gameSpace;
         this.score = score;
+        this.state = gameState;
     }
 
     public void pause() {
+        state.setState(GameStates.MENU);
         timer.cancel();
     }
 
     public void unpause() {
+        state.setState(GameStates.PLAYING);
         timer.schedule(timerTask, 0, 500);
     }
 
     public void startNewGame() {
         score.clear();
         gameSpace.clear();
-
+        state.setState(GameStates.PLAYING);
         timer.schedule(timerTask, 0, 500);
     }
 

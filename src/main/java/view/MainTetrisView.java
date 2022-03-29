@@ -1,16 +1,20 @@
 package view;
 
+import common.ISubscriber;
+import common.Model;
 import common.TetrisConfiguration;
 import org.jetbrains.annotations.NotNull;
+import tetris.GameStates;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class MainTetrisView extends JFrame {
-    private TetrisConfiguration configuration;
+public class MainTetrisView extends JFrame implements ISubscriber {
+    private final TetrisConfiguration configuration;
 
     private final ScoreLabel scoreLabel;
     private final BlocksPanel blocksMatrix;
+    private Model<GameStates> gameStateModel;
 
     public MainTetrisView(@NotNull TetrisConfiguration configuration) {
         super("Tetris");
@@ -54,8 +58,20 @@ public class MainTetrisView extends JFrame {
         connectModels();
     }
 
+    private void connectGameStateModel(Model<GameStates> gameStatesModel) {
+        this.gameStateModel = gameStatesModel;
+        gameStatesModel.addSubscriber(this);
+    }
+
     private void connectModels() {
+        connectGameStateModel(configuration.getGameState());
         blocksMatrix.setBlocksMatrixModel(configuration.getGameSpace());
         scoreLabel.setScoreModel(configuration.getScore());
+    }
+
+    @Override
+    public void reactOnNotify() {
+        GameStates state = gameStateModel.getData();
+        // handle close/open menu
     }
 }

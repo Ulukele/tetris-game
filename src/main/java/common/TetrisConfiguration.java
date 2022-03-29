@@ -1,9 +1,7 @@
 package common;
 
 import Exceptions.LoadConfigurationException;
-import tetris.GameSpace;
-import tetris.Score;
-import tetris.TetrisEngine;
+import tetris.*;
 
 import java.io.IOException;
 import java.util.Properties;
@@ -24,6 +22,7 @@ public class TetrisConfiguration {
     private GameSpace gameSpace;
     private Score score;
     private TetrisEngine tetrisEngine;
+    private GameState gameState;
 
     public TetrisConfiguration(String filename) {
         this.filename = filename;
@@ -124,9 +123,16 @@ public class TetrisConfiguration {
         return score;
     }
 
+    public GameState getGameState() {
+        if (gameState == null) {
+            gameState = new GameState(GameStates.MENU);
+        }
+        return gameState;
+    }
+
     public TetrisEngine getTetrisGame() {
         if (tetrisEngine == null) {
-            tetrisEngine = new TetrisEngine(getGameSpace(), getScore());
+            tetrisEngine = new TetrisEngine(getGameSpace(), getScore(), getGameState());
         }
         return tetrisEngine;
     }
