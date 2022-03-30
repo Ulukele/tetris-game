@@ -72,6 +72,12 @@ public class MainTetrisView extends JFrame implements ISubscriber {
     @Override
     public void reactOnNotify() {
         GameStates state = gameStateModel.getData();
-        // handle close/open menu
+        if (state == GameStates.Menu) {
+            // show 'Start new game' 'Resume' 'Exit'
+        } else if (state == GameStates.Lose) {
+            // show 'Start new game' 'Exit'
+        } else {
+            // close such objects as Menu and LoseMenu
+        }
     }
 }

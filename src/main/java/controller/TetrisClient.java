@@ -22,6 +22,10 @@ public class TetrisClient implements IClient {
             tetrisEngine.askRotateActiveFigure();
         } else if (command == Command.Menu) {
             tetrisEngine.pause();
+        } else if (command == Command.Continue) {
+            tetrisEngine.unpause();
+        } else if (command == Command.NewGame) {
+            tetrisEngine.startNewGame();
         }
     }
 }

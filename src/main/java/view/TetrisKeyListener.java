@@ -1,16 +1,16 @@
 package view;
 
 import controller.Command;
-import controller.TetrisClient;
+import controller.IClient;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class TetrisKeyListener implements KeyListener {
 
-    private final TetrisClient tetrisClient;
+    private final IClient tetrisClient;
 
-    public TetrisKeyListener(TetrisClient tetrisClient) {
+    public TetrisKeyListener(IClient tetrisClient) {
         super();
         this.tetrisClient = tetrisClient;
     }
@@ -22,7 +22,6 @@ public class TetrisKeyListener implements KeyListener {
             case ('s') -> tetrisClient.execute(Command.Down);
             case ('d') -> tetrisClient.execute(Command.Right);
             case (' ') -> tetrisClient.execute(Command.Rotate);
-            case ('\n') -> tetrisClient.execute(Command.Menu);
         }
     }
 

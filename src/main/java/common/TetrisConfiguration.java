@@ -125,7 +125,7 @@ public class TetrisConfiguration {
 
     public GameState getGameState() {
         if (gameState == null) {
-            gameState = new GameState(GameStates.MENU);
+            gameState = new GameState(GameStates.Menu);
         }
         return gameState;
     }

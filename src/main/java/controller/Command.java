@@ -7,5 +7,6 @@ public enum Command {
     Down,
     Rotate,
     Menu,
-    Enter
+    NewGame,
+    Continue
 }

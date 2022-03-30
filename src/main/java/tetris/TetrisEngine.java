@@ -29,19 +29,19 @@ public class TetrisEngine {
     }
 
     public void pause() {
-        state.setState(GameStates.MENU);
+        state.setState(GameStates.Menu);
         timer.cancel();
     }
 
     public void unpause() {
-        state.setState(GameStates.PLAYING);
+        state.setState(GameStates.Playing);
         timer.schedule(timerTask, 0, 500);
     }
 
     public void startNewGame() {
         score.clear();
         gameSpace.clear();
-        state.setState(GameStates.PLAYING);
+        state.setState(GameStates.Playing);
         timer.schedule(timerTask, 0, 500);
     }
 
@@ -59,6 +59,7 @@ public class TetrisEngine {
         try {
             gameSpace.fallActiveFigure();
         } catch (ActiveFigureException exception) {
+            state.setState(GameStates.Lose);
             pause();
         }
         int filledRows = gameSpace.deleteFilledRows();

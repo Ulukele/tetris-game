@@ -1,6 +1,7 @@
 package tetris;
 
 public enum GameStates {
-    PLAYING,
-    MENU
+    Playing,
+    Lose,
+    Menu,
 }
