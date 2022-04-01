@@ -20,12 +20,14 @@ public class TetrisClient implements IClient {
             tetrisEngine.askShiftActiveFigure(1, 0);
         } else if (command == Command.Rotate) {
             tetrisEngine.askRotateActiveFigure();
-        } else if (command == Command.Menu) {
+        } else if (command == Command.Stop) {
             tetrisEngine.pause();
         } else if (command == Command.Continue) {
             tetrisEngine.unpause();
         } else if (command == Command.NewGame) {
             tetrisEngine.startNewGame();
+        } else if (command == Command.SwitchStopContinue) {
+            tetrisEngine.switchState();
         }
     }
 }

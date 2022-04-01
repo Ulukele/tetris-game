@@ -3,6 +3,8 @@ package view;
 import common.ISubscriber;
 import common.Model;
 import common.TetrisConfiguration;
+import controller.IClient;
+import controller.TetrisClient;
 import org.jetbrains.annotations.NotNull;
 import tetris.GameStates;
 
@@ -55,7 +57,16 @@ public class MainTetrisView extends JFrame implements ISubscriber {
         blocksMatrix.setAlignmentX(Component.CENTER_ALIGNMENT);
         container.add(blocksMatrix);
 
+        connectMenu();
+
         connectModels();
+    }
+
+    private void connectMenu() {
+        IClient client = new TetrisClient(configuration.getTetrisGame());
+        JMenuBar menuBar = new JMenuBar();
+        menuBar.add(new GameMenu(client));
+        setJMenuBar(menuBar);
     }
 
     private void connectGameStateModel(Model<GameStates> gameStatesModel) {
@@ -72,7 +83,7 @@ public class MainTetrisView extends JFrame implements ISubscriber {
     @Override
     public void reactOnNotify() {
         GameStates state = gameStateModel.getData();
-        if (state == GameStates.Menu) {
+        if (state == GameStates.Pause) {
             // show 'Start new game' 'Resume' 'Exit'
         } else if (state == GameStates.Lose) {
             // show 'Start new game' 'Exit'

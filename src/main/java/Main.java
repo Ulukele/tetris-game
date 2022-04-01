@@ -32,9 +32,5 @@ public class Main {
         TetrisClient tetrisClient = new TetrisClient(tetrisEngine);
         TetrisKeyListener tetrisKeyListener = new TetrisKeyListener(tetrisClient);
         app.addKeyListener(tetrisKeyListener);
-
-        // Launch game
-        tetrisEngine.startNewGame();
-        
     }
 }

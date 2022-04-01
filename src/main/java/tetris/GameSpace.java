@@ -1,6 +1,5 @@
 package tetris;
 
-import Exceptions.ActiveFigureException;
 import common.Model;
 import common.Publisher;
 import org.jetbrains.annotations.NotNull;
@@ -64,13 +63,16 @@ public class GameSpace extends Publisher implements Model<BlockColor[][]> {
         );
     }
 
-    private void spawnNewActiveFigure() throws ActiveFigureException {
+    /**
+     * @return true if success, false otherwise
+     */
+    private boolean tryToSpawnNewActiveFigure() {
         blocksMatrix.appendFigure(activeFigure.getActiveFigure());
         activeFigure.changeActiveFigure();
         setActiveFigureStartPosition();
         boolean conflicts = checkFigureAndBlocksMatrixConflict();
         publishNotify();
-        if (conflicts) throw new ActiveFigureException("Conflict with matrix");
+        return !conflicts;
     }
 
     public void askShiftFigure(int x, int y) {
@@ -112,12 +114,16 @@ public class GameSpace extends Publisher implements Model<BlockColor[][]> {
         return filledRows;
     }
 
-    public void fallActiveFigure() throws ActiveFigureException {
+    /**
+     * @return true if success, false otherwise
+     */
+    public boolean tryToFallActiveFigure() {
         if (activeFigureFallen()) {
-            spawnNewActiveFigure();
+            return tryToSpawnNewActiveFigure();
         } else {
             shiftActiveFigure(0, -1);
         }
+        return true;
     }
 
     public void clear() {

@@ -6,7 +6,8 @@ public enum Command {
     Top,
     Down,
     Rotate,
-    Menu,
+    Stop,
     NewGame,
-    Continue
+    Continue,
+    SwitchStopContinue
 }
