@@ -5,13 +5,16 @@ import common.Model;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class ScoreLabel extends JLabel implements ISubscriber {
 
     private Model<Integer> scoreModel;
 
-    ScoreLabel() {
-        super("Score: ");
+    ScoreLabel(Font font) {
+        super("SCORE: ");
+        setFont(font);
+        setForeground(new Color(200, 200, 200));
     }
 
     public void setScoreModel(@NotNull Model<Integer> scoreModel) {
@@ -24,6 +27,6 @@ public class ScoreLabel extends JLabel implements ISubscriber {
 
     @Override
     public void reactOnNotify() {
-        this.setText("Score: " + scoreModel.getData());
+        this.setText("SCORE: " + scoreModel.getData());
     }
 }

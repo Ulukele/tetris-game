@@ -18,10 +18,11 @@ public class TetrisKeyListener implements KeyListener {
     @Override
     public void keyTyped(KeyEvent e) {
         switch (e.getKeyChar()) {
+            case ('w') -> tetrisClient.execute(Command.Rotate);
             case ('a') -> tetrisClient.execute(Command.Left);
             case ('s') -> tetrisClient.execute(Command.Down);
             case ('d') -> tetrisClient.execute(Command.Right);
-            case (' ') -> tetrisClient.execute(Command.Rotate);
+            case ('r') -> tetrisClient.execute(Command.NewGame);
             case('\n') -> tetrisClient.execute(Command.SwitchStopContinue);
         }
     }

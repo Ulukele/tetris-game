@@ -30,7 +30,6 @@ public class BlockView extends JPanel {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.fillRect(0, 0, size, size);
         g.setColor(borderColor);
         g.fillRect(0, 0, size, size);
         g.setColor(color);

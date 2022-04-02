@@ -64,7 +64,6 @@ public class TetrisEngine {
         boolean success = gameSpace.tryToFallActiveFigure();
         if (!success) {
             state.setState(GameStates.Lose);
-            pause();
             return;
         }
 

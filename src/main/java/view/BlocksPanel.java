@@ -10,7 +10,6 @@ import java.awt.*;
 public class BlocksPanel extends JPanel implements ISubscriber {
     private final int blocksX;
     private final int blocksY;
-    private final int blockSize;
     private final BlockView[][] blocks;
 
     private Model<BlockColor[][]> blocksMatrixModel;
@@ -28,7 +27,6 @@ public class BlocksPanel extends JPanel implements ISubscriber {
         super(new GridLayout(blocksY, blocksX));
         this.blocksX = blocksX;
         this.blocksY = blocksY;
-        this.blockSize = blockSize;
 
         blocks = new BlockView[blocksY][blocksX];
         for(int j = blocksY - 1; j >= 0; --j) {

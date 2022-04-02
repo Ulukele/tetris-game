@@ -5,6 +5,8 @@ import common.TetrisConfiguration;
 import view.MainTetrisView;
 import view.TetrisKeyListener;
 
+import javax.swing.*;
+
 
 public class Main {
 
@@ -23,7 +25,15 @@ public class Main {
 
         // Start GUI
         MainTetrisView app = new MainTetrisView(tetrisConfiguration);
-        app.setVisible(true);
+
+//        app.setVisible(true);
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                JFrame.setDefaultLookAndFeelDecorated(true);
+                app.setVisible(true);
+            }
+        });
 
         // Start client
         TetrisClient tetrisClient = new TetrisClient(tetrisEngine);

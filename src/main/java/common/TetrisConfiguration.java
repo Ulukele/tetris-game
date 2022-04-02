@@ -3,7 +3,9 @@ package common;
 import Exceptions.LoadConfigurationException;
 import tetris.*;
 
+import java.awt.*;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 public class TetrisConfiguration {
@@ -11,18 +13,17 @@ public class TetrisConfiguration {
 
     private String filename;
 
-    private int width;
-    private int height;
     private int blocksXCount;
     private int blocksYCount;
     private int blockSize;
-    private int topSize;
-    private int padding;
 
     private GameSpace gameSpace;
     private Score score;
     private TetrisEngine tetrisEngine;
+    private ActiveFigure activeFigure;
     private GameState gameState;
+
+    private Font font = new Font("Roboto", Font.BOLD, 25);;
 
     public TetrisConfiguration(String filename) {
         this.filename = filename;
@@ -51,42 +52,31 @@ public class TetrisConfiguration {
         } else {
             configureFromDefaults();
         }
-    }
-
-    private void calculateConfiguration() {
-        width = blocksXCount * blockSize + padding * 2;
-        height = blocksYCount * blockSize + padding * 2 + topSize;
+        try {
+            InputStream stream = ClassLoader.getSystemClassLoader().getResourceAsStream(
+                    "PressStart2P-Regular.ttf"
+            );
+            font = Font.createFont(Font.TRUETYPE_FONT, stream).deriveFont(15f);
+        } catch (IOException | FontFormatException exception) {
+            throw new LoadConfigurationException("Can't Load font");
+        }
     }
 
     private void configureFromDefaults() {
         blocksXCount = 10;
         blocksYCount = 20;
         blockSize = 40;
-        topSize = 50;
-        padding = 20;
-        calculateConfiguration();
     }
 
-    private void configureFromProperties() throws LoadConfigurationException{
+    private void configureFromProperties() throws LoadConfigurationException {
         try {
             blocksXCount = propertiesParser.getInteger("BLOCKS_X_COUNT");
             blocksYCount = propertiesParser.getInteger("BLOCKS_Y_COUNT");
             blockSize = propertiesParser.getInteger("BLOCK_SIZE");
-            topSize = propertiesParser.getInteger("TOP_SIZE");
-            padding = propertiesParser.getInteger("PADDING");
         } catch (NullPointerException | NumberFormatException exception) {
             configureFromDefaults();
             throw new LoadConfigurationException("Unable to parse configuration file, use defaults");
         }
-        calculateConfiguration();
-    }
-
-    public int getWidth() {
-        return width;
-    }
-
-    public int getHeight() {
-        return height;
     }
 
     public int getBlocksXCount() {
@@ -99,14 +89,6 @@ public class TetrisConfiguration {
 
     public int getBlockSize() {
         return blockSize;
-    }
-
-    public int getTopSize() {
-        return topSize;
-    }
-
-    public int getPadding() {
-        return padding;
     }
 
     public GameSpace getGameSpace() {
@@ -135,5 +117,16 @@ public class TetrisConfiguration {
             tetrisEngine = new TetrisEngine(getGameSpace(), getScore(), getGameState());
         }
         return tetrisEngine;
+    }
+
+    public ActiveFigure getActiveFigure() {
+        if (activeFigure == null) {
+            activeFigure = getGameSpace().getActiveFigure();
+        }
+        return activeFigure;
+    }
+
+    public Font getFont() {
+        return font;
     }
 }

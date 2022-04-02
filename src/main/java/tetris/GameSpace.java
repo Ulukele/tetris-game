@@ -146,6 +146,10 @@ public class GameSpace extends Publisher implements Model<BlockColor[][]> {
         return blocksMatrix.getHeight();
     }
 
+    public ActiveFigure getActiveFigure() {
+        return activeFigure;
+    }
+
     @Override
     public BlockColor[][] getData() {
         return getBlocksColors();
