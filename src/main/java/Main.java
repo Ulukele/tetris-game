@@ -5,9 +5,6 @@ import common.TetrisConfiguration;
 import view.MainTetrisView;
 import view.TetrisKeyListener;
 
-import javax.swing.*;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class Main {
 

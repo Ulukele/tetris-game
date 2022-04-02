@@ -9,7 +9,7 @@ import java.awt.event.ActionListener;
 
 public class GameMenu extends JMenu {
 
-    IClient tetrisClient;
+    private final IClient tetrisClient;
 
     public GameMenu(IClient tetrisClient) {
         super("Game");
@@ -20,26 +20,9 @@ public class GameMenu extends JMenu {
         this.add(start);
         this.add(resume);
 
-        start.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                tetrisClient.execute(Command.NewGame);
-            }
-        });
-
-        pause.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                tetrisClient.execute(Command.Stop);
-            }
-        });
-
-        resume.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                tetrisClient.execute(Command.Continue);
-            }
-        });
+        start.addActionListener(e -> tetrisClient.execute(Command.NewGame));
+        pause.addActionListener(e -> tetrisClient.execute(Command.Stop));
+        resume.addActionListener(e -> tetrisClient.execute(Command.Continue));
     }
 
 }

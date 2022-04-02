@@ -12,11 +12,11 @@ public class IFigureCreator implements FigureCreator {
     public Figure create(BlockColor color) {
         Block[] blocks = {
                 new Block(0, 0),
-                new Block(0, 1),
-                new Block(0, 2),
-                new Block(0, 3)
+                new Block(1, 0),
+                new Block(2, 0),
+                new Block(3, 0)
         };
-        Coordinate centre = new Coordinate(0.0f, 1.5f);
+        Coordinate centre = new Coordinate(1.5f, 0.5f);
         return new BaseFigure(centre, blocks, color);
     }
 }

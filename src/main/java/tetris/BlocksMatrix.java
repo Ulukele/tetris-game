@@ -17,6 +17,16 @@ public class BlocksMatrix {
         clear();
     }
 
+    public BlocksMatrix deepCopy() {
+        BlocksMatrix blocksMatrix = new BlocksMatrix(width, height);
+        for (int x = 0; x < width; ++x) {
+            for (int y = 0; y < height; ++y) {
+                blocksMatrix.set(x, y, getColor(x, y));
+            }
+        }
+        return blocksMatrix;
+    }
+
     public boolean isBLockInside(@NotNull Block block) {
         if (block.getY() < 0 || block.getY() >= getHeight()) return false;
         if (block.getX() < 0 || block.getX() >= getWidth()) return false;
@@ -33,9 +43,9 @@ public class BlocksMatrix {
 
     /**
      * removes rows from yMin to yMax
-     * @param yMin
-     * @param yMax
-     * @throws IndexOutOfBoundsException
+     * @param yMin -- index of first row
+     * @param yMax -- inder of last row
+     * @throws IndexOutOfBoundsException if indices incorrect
      */
     public void removeRows(int yMin, int yMax) throws IndexOutOfBoundsException {
         if (yMin < 0 || yMax >= height || yMin > yMax) throw new IndexOutOfBoundsException();
@@ -45,7 +55,7 @@ public class BlocksMatrix {
 
         for (int y = yMin; y < top; ++y) {
             for (int x = 0; x < width; ++x) {
-                copy(x, y + shiftValue, x, y);
+                copyValue(x, y + shiftValue, x, y);
             }
         }
 
@@ -69,7 +79,7 @@ public class BlocksMatrix {
         }
     }
 
-    private void copy(int xSrc, int ySrc, int xDst, int yDst) {
+    private void copyValue(int xSrc, int ySrc, int xDst, int yDst) {
         BlockColor color = getColor(xSrc, ySrc);
         set(xDst, yDst, color);
     }

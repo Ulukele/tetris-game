@@ -127,24 +127,15 @@ public class GameSpace extends Publisher implements Model<BlockColor[][]> {
     }
 
     public void clear() {
+        activeFigure.changeActiveFigure();
         setActiveFigureStartPosition();
         blocksMatrix.clear();
     }
 
     public BlockColor[][] getBlocksColors() {
-        BlockColor[][] instance = blocksMatrix.getColorsMatrix();
-        BlockColor[][] copy = new BlockColor[blocksMatrix.getHeight()][blocksMatrix.getWidth()];
-        for (int i = 0; i < blocksMatrix.getHeight(); ++i) {
-            for (int j = 0; j < blocksMatrix.getWidth(); ++j) {
-                copy[i][j] = instance[i][j];
-            }
-        }
-        for (final Block block : activeFigure.getActiveFigure().getBlocks()) {
-            if (blocksMatrix.isBLockInside(block)) {
-                copy[block.getY()][block.getX()] = block.getColor();
-            }
-        }
-        return copy;
+        BlocksMatrix copy = blocksMatrix.deepCopy();
+        copy.appendFigure(activeFigure.getActiveFigure());
+        return copy.getColorsMatrix();
     }
 
     public int getWidth() {
