@@ -23,7 +23,9 @@ public class TetrisConfiguration {
     private ActiveFigure activeFigure;
     private GameState gameState;
 
-    private Font font = new Font("Roboto", Font.BOLD, 25);;
+    private Font font = new Font("Roboto", Font.BOLD, 25);
+    private final Color backgroundColor = new Color(50, 50, 60);
+    private final Color contrastColor = new Color(200, 200, 220);
 
     public TetrisConfiguration(String filename) {
         this.filename = filename;
@@ -56,6 +58,7 @@ public class TetrisConfiguration {
             InputStream stream = ClassLoader.getSystemClassLoader().getResourceAsStream(
                     "PressStart2P-Regular.ttf"
             );
+            if (stream == null) throw new IOException();
             font = Font.createFont(Font.TRUETYPE_FONT, stream).deriveFont(15f);
         } catch (IOException | FontFormatException exception) {
             throw new LoadConfigurationException("Can't Load font");
@@ -128,5 +131,13 @@ public class TetrisConfiguration {
 
     public Font getFont() {
         return font;
+    }
+
+    public Color getBackgroundColor() {
+        return backgroundColor;
+    }
+
+    public Color getContrastColor() {
+        return contrastColor;
     }
 }

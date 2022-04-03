@@ -14,7 +14,7 @@ public class BlocksPanel extends JPanel implements ISubscriber {
 
     private Model<BlockColor[][]> blocksMatrixModel;
 
-    private final Color emptyColor = new Color(50, 50, 50);
+    private final Color emptyColor;
     private final Color redColor = new Color(150, 70, 70);
     private final Color orangeColor = new Color(199, 114, 46);
     private final Color yellowColor = new Color(212, 187, 75);
@@ -23,8 +23,9 @@ public class BlocksPanel extends JPanel implements ISubscriber {
     private final Color purpleColor = new Color(147, 57, 200);
 
 
-    BlocksPanel(int blocksX, int blocksY, int blockSize) {
+    BlocksPanel(int blocksX, int blocksY, int blockSize, Color backgroundColor) {
         super(new GridLayout(blocksY, blocksX));
+        this.emptyColor = backgroundColor;
         this.blocksX = blocksX;
         this.blocksY = blocksY;
 

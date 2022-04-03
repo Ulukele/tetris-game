@@ -80,4 +80,8 @@ public class TetrisEngine {
         if (state.getData() != GameStates.Playing) return;
         gameSpace.askRotateFigure();
     }
+
+    public void setAboutInfoState() {
+        state.setState(GameStates.AboutInfo);
+    }
 }

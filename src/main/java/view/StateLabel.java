@@ -2,30 +2,18 @@ package view;
 
 import common.ISubscriber;
 import common.Model;
-import tetris.GameState;
 import tetris.GameStates;
+import view.common.MultiLineLabel;
 
 import javax.swing.*;
-import javax.swing.text.JTextComponent;
 import java.awt.*;
-import java.io.IOException;
-import java.io.InputStream;
 
-public class StateLabel extends JTextArea implements ISubscriber {
+public class StateLabel extends MultiLineLabel implements ISubscriber {
     private Model<GameStates> gameStatesModel;
 
-    public StateLabel(Font font) {
+    public StateLabel() {
         super();
-        setEditable(false);
-        setCursor(null);
-        setOpaque(false);
-        setFocusable(false);
-        setWrapStyleWord(true);
-        setLineWrap(true);
         setAlignmentY(JLabel.CENTER_ALIGNMENT);
-
-        setFont(font);
-        setForeground(new Color(200, 200, 200));
     }
 
     public void setGameStatesModel(Model<GameStates> gameStatesModel) {

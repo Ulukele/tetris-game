@@ -14,11 +14,13 @@ public class NextBlockPanel extends JPanel implements ISubscriber {
     private final int blocksY = 4;
     private final BlockView[][] blocksMatrix;
 
-    private final Color emptyColor = new Color(50, 50, 50);
-    private final Color filledColor = new Color(200, 200, 200);
+    private final Color emptyColor;
+    private final Color filledColor;
 
-    public NextBlockPanel(int blockSize) {
+    public NextBlockPanel(int blockSize, Color backgroundColor, Color figureColor) {
         super();
+        this.emptyColor = backgroundColor;
+        this.filledColor = figureColor;
         setLayout(new GridLayout(blocksX, blocksY));
 
         blocksMatrix = new BlockView[blocksY][blocksX];

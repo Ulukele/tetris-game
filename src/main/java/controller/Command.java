@@ -9,5 +9,6 @@ public enum Command {
     Stop,
     NewGame,
     Continue,
-    SwitchStopContinue
+    SwitchStopContinue,
+    About
 }

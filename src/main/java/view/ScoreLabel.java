@@ -11,10 +11,8 @@ public class ScoreLabel extends JLabel implements ISubscriber {
 
     private Model<Integer> scoreModel;
 
-    ScoreLabel(Font font) {
+    ScoreLabel() {
         super("SCORE: ");
-        setFont(font);
-        setForeground(new Color(200, 200, 200));
     }
 
     public void setScoreModel(@NotNull Model<Integer> scoreModel) {

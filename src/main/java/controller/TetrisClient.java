@@ -28,6 +28,8 @@ public class TetrisClient implements IClient {
             tetrisEngine.startNewGame();
         } else if (command == Command.SwitchStopContinue) {
             tetrisEngine.switchState();
+        } else if (command == Command.About) {
+            tetrisEngine.setAboutInfoState();
         }
     }
 }
