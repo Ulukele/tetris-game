@@ -3,14 +3,14 @@ package tetris;
 import common.Model;
 import common.Publisher;
 
-public class Score extends Publisher implements Model<Integer> {
+public class ScoreCounter extends Publisher implements Model<Integer> {
     private int score;
 
-    public Score() {
+    public ScoreCounter() {
         score = 0;
         publishNotify();
     }
-    public Score(int score) { this.score = score; }
+    public ScoreCounter(int score) { this.score = score; }
 
     public int getScore() {
         return score;

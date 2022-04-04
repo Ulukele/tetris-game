@@ -1,5 +1,9 @@
 package tetris;
 
+import tetris.highScores.UserScore;
+import tetris.highScores.UsersScoresTable;
+
+import java.time.LocalDateTime;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -10,20 +14,24 @@ import java.util.TimerTask;
  */
 public class TetrisEngine {
     private final GameSpace gameSpace;
-    private final Score score;
+    private final ScoreCounter scoreCounter;
     private final GameState state;
-    private final Timer timer = new Timer();
-    private final TimerTask timerTask = new TimerTask() {
-        @Override
-        public void run() {
-            nextTick();
-        }
-    };
 
-    public TetrisEngine(GameSpace gameSpace, Score score, GameState gameState) {
+    public TetrisEngine(
+            GameSpace gameSpace,
+            ScoreCounter scoreCounter,
+            GameState gameState
+    ) {
         this.gameSpace = gameSpace;
-        this.score = score;
+        this.scoreCounter = scoreCounter;
         this.state = gameState;
+        Timer timer = new Timer();
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                nextTick();
+            }
+        };
         timer.schedule(timerTask, 0, 500);
     }
 
@@ -36,15 +44,15 @@ public class TetrisEngine {
     }
 
     public void switchState() {
-        if (state.getData() == GameStates.Pause) {
-            state.setState(GameStates.Playing);
-        } else if (state.getData() == GameStates.Playing) {
+        if (state.getData() == GameStates.Playing) {
             state.setState(GameStates.Pause);
+        } else {
+            state.setState(GameStates.Playing);
         }
     }
 
     public void startNewGame() {
-        score.clear();
+        scoreCounter.clear();
         gameSpace.clear();
         state.setState(GameStates.Playing);
     }
@@ -56,7 +64,7 @@ public class TetrisEngine {
         } else {
             scoreDelta = deletedRows * gameSpace.getWidth();
         }
-        score.increase(scoreDelta);
+        scoreCounter.increase(scoreDelta);
     }
 
     public void nextTick() {
