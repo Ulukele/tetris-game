@@ -10,5 +10,6 @@ public enum Command {
     NewGame,
     Continue,
     SwitchStopContinue,
-    About
+    About,
+    HighScores
 }

@@ -30,6 +30,8 @@ public class TetrisClient implements IClient {
             tetrisEngine.switchState();
         } else if (command == Command.About) {
             tetrisEngine.setAboutInfoState();
+        } else if (command == Command.HighScores) {
+            tetrisEngine.setHighScoresState();
         }
     }
 }

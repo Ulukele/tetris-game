@@ -1,6 +1,7 @@
 package tetris.highScores;
 
 import java.io.*;
+import java.net.URL;
 
 public class DumpWorker {
     private final String filename;
@@ -10,12 +11,20 @@ public class DumpWorker {
     }
 
     public void writeDump(String dumpData) throws IOException {
-        Writer writer = new FileWriter(filename);
+        URL resource = getClass().getClassLoader().getResource(filename);
+        if (resource == null) throw new IOException();
+        String absolutePath = resource.getFile();
+
+        Writer writer = new FileWriter(absolutePath);
         writer.write(dumpData);
     }
 
     public String readDump() throws IOException {
-        Reader reader = new BufferedReader(new FileReader(filename));
+        URL resource = getClass().getClassLoader().getResource(filename);
+        if (resource == null) throw new IOException();
+        String absolutePath = resource.getFile();
+
+        Reader reader = new BufferedReader(new FileReader(absolutePath));
         StringBuilder sb = new StringBuilder();
         int symbol;
         while (true) {

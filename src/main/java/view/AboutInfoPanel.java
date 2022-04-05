@@ -3,6 +3,8 @@ package view;
 import view.common.MultiLineLabel;
 
 import javax.swing.*;
+import javax.swing.text.GapContent;
+import java.awt.*;
 
 public class AboutInfoPanel extends JPanel {
     private final MultiLineLabel infoLabel;
@@ -27,7 +29,23 @@ public class AboutInfoPanel extends JPanel {
                 
                 Enter - Pause
                 """);
-        add(infoLabel);
+
+        GroupLayout layout = new GroupLayout(this);
+        this.setLayout(layout);
+
+        layout.setAutoCreateGaps(true);
+        layout.setAutoCreateContainerGaps(true);
+
+        layout.setVerticalGroup(
+                layout.createSequentialGroup()
+                        .addComponent(infoLabel)
+        );
+        layout.setHorizontalGroup(
+                layout.createSequentialGroup()
+                        .addComponent(infoLabel)
+        );
+
+//        add(infoLabel);
         setVisible(true);
     }
 

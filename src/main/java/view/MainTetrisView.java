@@ -1,12 +1,12 @@
 package view;
 
+import Exceptions.HighScoresException;
 import common.ISubscriber;
 import common.Model;
 import common.TetrisConfiguration;
 import controller.IClient;
 import controller.TetrisClient;
 import org.jetbrains.annotations.NotNull;
-import tetris.GameState;
 import tetris.GameStates;
 
 import javax.swing.*;
@@ -20,6 +20,7 @@ public class MainTetrisView extends JFrame implements ISubscriber {
     private final StateLabel stateLabel;
     private final NextBlockPanel nextBlockPanel;
     private final BlocksPanel blocksMatrix;
+    private final HighScoresTablePanel highScoresTablePanel;
 
     private Model<GameStates> gameStatesModel;
 
@@ -39,11 +40,20 @@ public class MainTetrisView extends JFrame implements ISubscriber {
         layout.setAutoCreateGaps(true);
         layout.setAutoCreateContainerGaps(true);
 
+        // Add scores table
+        highScoresTablePanel = new HighScoresTablePanel();
+        highScoresTablePanel.setBackground(configuration.getBackgroundColor().brighter());
+        highScoresTablePanel.getLabel().setFont(configuration.getFont());
+        highScoresTablePanel.getLabel().setForeground(configuration.getContrastColor());
+        highScoresTablePanel.getTable().setBackground(configuration.getContrastColor());
+        highScoresTablePanel.getTable().setFont(configuration.getFont());
+        highScoresTablePanel.setVisible(false);
+
         // Add about info
         aboutInfoPanel = new AboutInfoPanel();
         aboutInfoPanel.getInfoLabel().setFont(configuration.getFont());
         aboutInfoPanel.getInfoLabel().setForeground(configuration.getContrastColor());
-        aboutInfoPanel.setBackground(configuration.getBackgroundColor());
+        aboutInfoPanel.setBackground(configuration.getBackgroundColor().brighter());
 
         // Add score info
         scoreLabel = new ScoreLabel();
@@ -82,6 +92,7 @@ public class MainTetrisView extends JFrame implements ISubscriber {
                         )
                         .addComponent(stateLabel)
                         .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+                                .addComponent(highScoresTablePanel)
                                 .addComponent(aboutInfoPanel)
                                 .addComponent(blocksMatrix)
                         )
@@ -94,6 +105,7 @@ public class MainTetrisView extends JFrame implements ISubscriber {
                         )
                         .addComponent(stateLabel)
                         .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+                                .addComponent(highScoresTablePanel)
                                 .addComponent(aboutInfoPanel)
                                 .addComponent(blocksMatrix)
                         )
@@ -102,9 +114,18 @@ public class MainTetrisView extends JFrame implements ISubscriber {
         // Connect models
         connectMenu();
         connectModels();
+        loadHighScores();
 
         // Finish layout configuration
         pack();
+    }
+
+    private void loadHighScores() {
+        try {
+            configuration.getUsersScoresTable().initFromFile();
+        } catch (HighScoresException highScoresException) {
+            JOptionPane.showMessageDialog(this, "Failed to load high-scores");
+        }
     }
 
     private void connectMenu() {
@@ -124,16 +145,21 @@ public class MainTetrisView extends JFrame implements ISubscriber {
         scoreLabel.setScoreModel(configuration.getScore());
         nextBlockPanel.setNextFigureModel(configuration.getActiveFigure());
         stateLabel.setGameStatesModel(configuration.getGameState());
+        highScoresTablePanel.setUserScoresListModel(configuration.getUsersScoresTable());
         connectModel();
     }
 
     @Override
     public void reactOnNotify() {
         GameStates gameState = gameStatesModel.getData();
+
+        aboutInfoPanel.setVisible(false);
+        highScoresTablePanel.setVisible(false);
+
         if (gameState == GameStates.AboutInfo) {
             aboutInfoPanel.setVisible(true);
-        } else {
-            aboutInfoPanel.setVisible(false);
+        } else if(gameState == GameStates.HighScores) {
+            highScoresTablePanel.setVisible(true);
         }
     }
 }

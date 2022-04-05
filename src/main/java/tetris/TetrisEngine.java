@@ -92,4 +92,8 @@ public class TetrisEngine {
     public void setAboutInfoState() {
         state.setState(GameStates.AboutInfo);
     }
+
+    public void setHighScoresState() {
+        state.setState(GameStates.HighScores);
+    }
 }

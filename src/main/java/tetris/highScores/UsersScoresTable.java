@@ -15,7 +15,7 @@ public class UsersScoresTable extends Publisher implements Model<List<UserScore>
     private final int maxScoresToShow;
     private final int maxScoresToStore;
     private final Set<UserScore> usersScores = new TreeSet<>(new UserScoreComparator());
-    private final DumpWorker dumpWorker = new DumpWorker("high-scores-dump.txt");
+    private final DumpWorker dumpWorker = new DumpWorker("high-scores-dump.json");
     private final Gson gson = new Gson();
 
     public UsersScoresTable(int maxScoresToShow, int maxScoresToStore) {
@@ -23,7 +23,7 @@ public class UsersScoresTable extends Publisher implements Model<List<UserScore>
         this.maxScoresToStore = maxScoresToStore;
     }
 
-    private void initFromFile() throws HighScoresException {
+    public void initFromFile() throws HighScoresException {
         try {
             String dumpData = dumpWorker.readDump();
 
@@ -31,9 +31,10 @@ public class UsersScoresTable extends Publisher implements Model<List<UserScore>
             Type type = new TypeToken<List<UserScore>>() {}.getType();
 
             usersScoresList = gson.fromJson(dumpData, type);
-
-            usersScores.clear();
-            usersScores.addAll(usersScoresList.subList(0, maxScoresToShow));
+            if (usersScoresList != null) {
+                usersScores.clear();
+                usersScores.addAll(usersScoresList.subList(0, maxScoresToShow));
+            }
         } catch (IOException ioException) {
             throw new HighScoresException();
         }
@@ -45,7 +46,7 @@ public class UsersScoresTable extends Publisher implements Model<List<UserScore>
         publishNotify();
     }
 
-    private void dumpData() throws HighScoresException {
+    public void dumpData() throws HighScoresException {
         List<UserScore> usersScoresList;
         usersScoresList = toUsersScoresList().subList(0, maxScoresToStore);
 

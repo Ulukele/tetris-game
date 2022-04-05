@@ -9,6 +9,5 @@ public class MultiLineLabel extends JTextArea {
         setCursor(null);
         setOpaque(false);
         setFocusable(false);
-
     }
 }
