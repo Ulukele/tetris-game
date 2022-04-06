@@ -1,6 +1,7 @@
 package view;
 
 import Exceptions.HighScoresException;
+import common.ShortDateTimeFormatter;
 import common.ISubscriber;
 import common.Model;
 import common.TetrisConfiguration;
@@ -8,9 +9,11 @@ import controller.IClient;
 import controller.TetrisClient;
 import org.jetbrains.annotations.NotNull;
 import tetris.GameStates;
+import tetris.highScores.UserScore;
 
 import javax.swing.*;
 import java.awt.*;
+import java.time.LocalDateTime;
 
 public class MainTetrisView extends JFrame implements ISubscriber {
     private final TetrisConfiguration configuration;
@@ -41,7 +44,7 @@ public class MainTetrisView extends JFrame implements ISubscriber {
         layout.setAutoCreateContainerGaps(true);
 
         // Add scores table
-        highScoresTablePanel = new HighScoresTablePanel();
+        highScoresTablePanel = new HighScoresTablePanel(configuration.getUserScoresTableRowsCount());
         highScoresTablePanel.setBackground(configuration.getBackgroundColor().brighter());
         highScoresTablePanel.getLabel().setFont(configuration.getFont());
         highScoresTablePanel.getLabel().setForeground(configuration.getContrastColor());
@@ -158,8 +161,23 @@ public class MainTetrisView extends JFrame implements ISubscriber {
 
         if (gameState == GameStates.AboutInfo) {
             aboutInfoPanel.setVisible(true);
-        } else if(gameState == GameStates.HighScores) {
+        } else if (gameState == GameStates.HighScores) {
             highScoresTablePanel.setVisible(true);
+        } else if (gameState == GameStates.Lose) {
+            registerResult();
+        }
+    }
+
+    private void registerResult() {
+        String userName = JOptionPane.showInputDialog("Enter your name:");
+        int score = configuration.getScore().getScore();
+        String dateTimeString = ShortDateTimeFormatter.format(LocalDateTime.now());
+
+        UserScore userScore = new UserScore(userName, score, dateTimeString);
+        try {
+            configuration.getUsersScoresTable().addUserScore(userScore);
+        } catch (HighScoresException highScoresException) {
+            JOptionPane.showMessageDialog(this, "Can't save result");
         }
     }
 }

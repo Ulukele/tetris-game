@@ -3,8 +3,6 @@ package view;
 import view.common.MultiLineLabel;
 
 import javax.swing.*;
-import javax.swing.text.GapContent;
-import java.awt.*;
 
 public class AboutInfoPanel extends JPanel {
     private final MultiLineLabel infoLabel;
@@ -45,7 +43,6 @@ public class AboutInfoPanel extends JPanel {
                         .addComponent(infoLabel)
         );
 
-//        add(infoLabel);
         setVisible(true);
     }
 

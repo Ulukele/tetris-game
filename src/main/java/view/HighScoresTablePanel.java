@@ -9,23 +9,33 @@ import java.util.List;
 
 public class HighScoresTablePanel extends JPanel implements ISubscriber {
     private Model<List<UserScore>> userScoresListModel;
-    private List<UserScore> userScores;
     private final JTable table;
     private final JLabel label;
 
-    public HighScoresTablePanel() {
+    public HighScoresTablePanel(int rowsCount) {
         super();
 
         label = new JLabel("High-Scores");
 
-        String[] columnNames = {"Time", "User", "Score"};
-        String[][] data = {};
-        table = new JTable(data, columnNames);
-
+        table = new JTable(rowsCount, 3);
         table.setEnabled(false);
 
-        add(label);
-        add(table);
+        GroupLayout layout = new GroupLayout(this);
+        this.setLayout(layout);
+
+        layout.setAutoCreateGaps(true);
+        layout.setAutoCreateContainerGaps(true);
+
+        layout.setVerticalGroup(
+                layout.createSequentialGroup()
+                        .addComponent(label)
+                        .addComponent(table)
+        );
+        layout.setHorizontalGroup(
+                layout.createParallelGroup()
+                        .addComponent(label)
+                        .addComponent(table)
+        );
     }
 
     public JTable getTable() {
@@ -43,7 +53,15 @@ public class HighScoresTablePanel extends JPanel implements ISubscriber {
 
     @Override
     public void reactOnNotify() {
-        userScores = userScoresListModel.getData();
+        List<UserScore> userScores = userScoresListModel.getData();
+
+        int idx = 0;
+        for (final UserScore userScore : userScores) {
+            table.setValueAt(userScore.getUserName(), idx, 0);
+            table.setValueAt(userScore.getScore(),  idx, 1);
+            table.setValueAt(userScore.getDateTime(),  idx, 2);
+            idx++;
+        }
 
         repaint();
     }

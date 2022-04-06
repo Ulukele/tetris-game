@@ -5,9 +5,9 @@ import java.time.LocalDateTime;
 public class UserScore {
     private final String userName;
     private final int score;
-    private final LocalDateTime dateTime;
+    private final String dateTime;
 
-    public UserScore(String userName, int score, LocalDateTime dateTime) {
+    public UserScore(String userName, int score, String dateTime) {
         this.userName = userName;
         this.score = score;
         this.dateTime = dateTime;
@@ -21,7 +21,7 @@ public class UserScore {
         return score;
     }
 
-    public LocalDateTime getDateTime() {
+    public String getDateTime() {
         return dateTime;
     }
 }

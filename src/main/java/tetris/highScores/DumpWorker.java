@@ -13,10 +13,13 @@ public class DumpWorker {
     public void writeDump(String dumpData) throws IOException {
         URL resource = getClass().getClassLoader().getResource(filename);
         if (resource == null) throw new IOException();
-        String absolutePath = resource.getFile();
 
-        Writer writer = new FileWriter(absolutePath);
-        writer.write(dumpData);
+        String absolutePath = resource.getFile();
+        try ( Writer writer = new FileWriter(absolutePath)) {
+            writer.write(dumpData);
+        } catch (IOException ioException) {
+            throw new IOException();
+        }
     }
 
     public String readDump() throws IOException {
@@ -24,17 +27,20 @@ public class DumpWorker {
         if (resource == null) throw new IOException();
         String absolutePath = resource.getFile();
 
-        Reader reader = new BufferedReader(new FileReader(absolutePath));
-        StringBuilder sb = new StringBuilder();
-        int symbol;
-        while (true) {
-            symbol = reader.read();
-            if (symbol == -1) { // End of stream case
-                break;
+        try (Reader reader = new BufferedReader(new FileReader(absolutePath))) {
+            StringBuilder sb = new StringBuilder();
+            int symbol;
+            while (true) {
+                symbol = reader.read();
+                if (symbol == -1) { // End of stream case
+                    break;
+                }
+                char character = (char) symbol;
+                sb.append(character);
             }
-            char character = (char) symbol;
-            sb.append(character);
+            return sb.toString();
+        } catch (IOException ioException) {
+            throw new IOException();
         }
-        return sb.toString();
     }
 }

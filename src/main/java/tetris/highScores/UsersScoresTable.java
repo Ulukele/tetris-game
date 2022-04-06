@@ -12,44 +12,37 @@ import java.util.*;
 
 public class UsersScoresTable extends Publisher implements Model<List<UserScore>> {
 
-    private final int maxScoresToShow;
-    private final int maxScoresToStore;
-    private final Set<UserScore> usersScores = new TreeSet<>(new UserScoreComparator());
+    private final int scoresToShow;
+    private List<UserScore> usersScoresList;
+    private final UserScoreComparator userScoreComparator = new UserScoreComparator();
     private final DumpWorker dumpWorker = new DumpWorker("high-scores-dump.json");
     private final Gson gson = new Gson();
 
-    public UsersScoresTable(int maxScoresToShow, int maxScoresToStore) {
-        this.maxScoresToShow = maxScoresToShow;
-        this.maxScoresToStore = maxScoresToStore;
+    public UsersScoresTable(int scoresToShow) {
+        this.scoresToShow = scoresToShow;
+        this.usersScoresList = new ArrayList<>(scoresToShow);
     }
 
     public void initFromFile() throws HighScoresException {
         try {
             String dumpData = dumpWorker.readDump();
-
-            List<UserScore> usersScoresList;
             Type type = new TypeToken<List<UserScore>>() {}.getType();
+            List<UserScore> userScoresFromFile = gson.fromJson(dumpData, type);
 
-            usersScoresList = gson.fromJson(dumpData, type);
-            if (usersScoresList != null) {
-                usersScores.clear();
-                usersScores.addAll(usersScoresList.subList(0, maxScoresToShow));
-            }
+            if (userScoresFromFile != null) usersScoresList = userScoresFromFile;
         } catch (IOException ioException) {
             throw new HighScoresException();
         }
+        publishNotify();
     }
 
     public void addUserScore(UserScore userScore) throws HighScoresException {
-        usersScores.add(userScore);
+        usersScoresList.add(userScore);
         dumpData();
         publishNotify();
     }
 
     public void dumpData() throws HighScoresException {
-        List<UserScore> usersScoresList;
-        usersScoresList = toUsersScoresList().subList(0, maxScoresToStore);
-
         String dataDump = gson.toJson(usersScoresList);
 
         try {
@@ -59,12 +52,12 @@ public class UsersScoresTable extends Publisher implements Model<List<UserScore>
         }
     }
 
-    private List<UserScore> toUsersScoresList() {
-        return new ArrayList<>(usersScores);
-    }
-
     @Override
     public List<UserScore> getData() {
-        return toUsersScoresList().subList(0, maxScoresToShow);
+        usersScoresList.sort(userScoreComparator);
+        if (usersScoresList.size() > scoresToShow) {
+            usersScoresList = usersScoresList.subList(0, scoresToShow);
+        }
+        return usersScoresList;
     }
 }

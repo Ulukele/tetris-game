@@ -40,6 +40,7 @@ public class TetrisEngine {
     }
 
     public void unpause() {
+        if (state.getData() == GameStates.Lose) return;
         state.setState(GameStates.Playing);
     }
 
@@ -47,7 +48,7 @@ public class TetrisEngine {
         if (state.getData() == GameStates.Playing) {
             state.setState(GameStates.Pause);
         } else {
-            state.setState(GameStates.Playing);
+            unpause();
         }
     }
 

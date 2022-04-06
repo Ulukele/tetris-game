@@ -27,7 +27,7 @@ public class StateLabel extends MultiLineLabel implements ISubscriber {
         GameStates state = gameStatesModel.getData();
         if (state == GameStates.Lose) {
             setText("GAME OVER\n\nPRESS R TO RESTART");
-        } else if (state == GameStates.Pause) {
+        } else if (state != GameStates.Playing) {
             setText("PAUSE\n\nPRESS ENTER TO CONTINUE");
         } else {
             setText("");

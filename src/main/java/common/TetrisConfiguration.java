@@ -23,7 +23,9 @@ public class TetrisConfiguration {
     private TetrisEngine tetrisEngine;
     private ActiveFigure activeFigure;
     private GameState gameState;
+
     private UsersScoresTable usersScoresTable;
+    private final int userScoresTableRowsCount = 10;
 
     private Font font = new Font("Roboto", Font.BOLD, 25);
     private final Color backgroundColor = new Color(50, 50, 60);
@@ -133,9 +135,13 @@ public class TetrisConfiguration {
 
     public UsersScoresTable getUsersScoresTable() {
         if (usersScoresTable == null) {
-            usersScoresTable = new UsersScoresTable(10, 10);
+            usersScoresTable = new UsersScoresTable(userScoresTableRowsCount);
         }
         return usersScoresTable;
+    }
+
+    public int getUserScoresTableRowsCount() {
+        return  userScoresTableRowsCount;
     }
 
     public Font getFont() {
