@@ -1,7 +1,6 @@
 package view;
 
 import Exceptions.HighScoresException;
-import common.ShortDateTimeFormatter;
 import common.ISubscriber;
 import common.Model;
 import common.TetrisConfiguration;
@@ -171,9 +170,9 @@ public class MainTetrisView extends JFrame implements ISubscriber {
     private void registerResult() {
         String userName = JOptionPane.showInputDialog("Enter your name:");
         int score = configuration.getScore().getScore();
-        String dateTimeString = ShortDateTimeFormatter.format(LocalDateTime.now());
+        LocalDateTime dateTime = LocalDateTime.now();
 
-        UserScore userScore = new UserScore(userName, score, dateTimeString);
+        UserScore userScore = new UserScore(userName, score, dateTime);
         try {
             configuration.getUsersScoresTable().addUserScore(userScore);
         } catch (HighScoresException highScoresException) {

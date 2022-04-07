@@ -2,7 +2,7 @@ package common;
 
 import Exceptions.LoadConfigurationException;
 import tetris.*;
-import tetris.highScores.UsersScoresTable;
+import tetris.highScores.UserScoresTable;
 
 import java.awt.*;
 import java.io.IOException;
@@ -24,7 +24,7 @@ public class TetrisConfiguration {
     private ActiveFigure activeFigure;
     private GameState gameState;
 
-    private UsersScoresTable usersScoresTable;
+    private UserScoresTable userScoresTable;
     private final int userScoresTableRowsCount = 10;
 
     private Font font = new Font("Roboto", Font.BOLD, 25);
@@ -133,11 +133,11 @@ public class TetrisConfiguration {
         return activeFigure;
     }
 
-    public UsersScoresTable getUsersScoresTable() {
-        if (usersScoresTable == null) {
-            usersScoresTable = new UsersScoresTable(userScoresTableRowsCount);
+    public UserScoresTable getUsersScoresTable() {
+        if (userScoresTable == null) {
+            userScoresTable = new UserScoresTable(userScoresTableRowsCount);
         }
-        return usersScoresTable;
+        return userScoresTable;
     }
 
     public int getUserScoresTableRowsCount() {

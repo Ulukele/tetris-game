@@ -1,9 +1,5 @@
 package tetris;
 
-import tetris.highScores.UserScore;
-import tetris.highScores.UsersScoresTable;
-
-import java.time.LocalDateTime;
 import java.util.Timer;
 import java.util.TimerTask;
 

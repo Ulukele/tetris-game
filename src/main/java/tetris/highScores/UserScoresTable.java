@@ -1,26 +1,50 @@
 package tetris.highScores;
 
 import Exceptions.HighScoresException;
-import com.google.gson.Gson;
+import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import common.Model;
 import common.Publisher;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.time.LocalDateTime;
 import java.util.*;
 
-public class UsersScoresTable extends Publisher implements Model<List<UserScore>> {
+public class UserScoresTable extends Publisher implements Model<List<UserScore>> {
 
     private final int scoresToShow;
     private List<UserScore> usersScoresList;
     private final UserScoreComparator userScoreComparator = new UserScoreComparator();
     private final DumpWorker dumpWorker = new DumpWorker("high-scores-dump.json");
-    private final Gson gson = new Gson();
+    private Gson gson;
 
-    public UsersScoresTable(int scoresToShow) {
+    public UserScoresTable(int scoresToShow) {
         this.scoresToShow = scoresToShow;
         this.usersScoresList = new ArrayList<>(scoresToShow);
+        configureGson();
+    }
+
+    private void configureGson() {
+        JsonSerializer<LocalDateTime> serializer = new JsonSerializer<LocalDateTime>() {
+            @Override
+            public JsonElement serialize(LocalDateTime dateTime, Type type, JsonSerializationContext jsonSerializationContext) {
+                return dateTime == null ? null : new JsonPrimitive(dateTime.toString());
+            }
+        };
+
+        JsonDeserializer<LocalDateTime> deserializer = new JsonDeserializer<LocalDateTime>() {
+            @Override
+            public LocalDateTime deserialize(JsonElement json, Type typeOfT,
+                                    JsonDeserializationContext context) throws JsonParseException {
+                return json == null ? null : LocalDateTime.parse(json.getAsString());
+            }
+        };
+
+        gson = new GsonBuilder()
+                .registerTypeAdapter(LocalDateTime.class, serializer)
+                .registerTypeAdapter(LocalDateTime.class, deserializer)
+                .create();
     }
 
     public void initFromFile() throws HighScoresException {

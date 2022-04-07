@@ -2,6 +2,7 @@ package view;
 
 import common.ISubscriber;
 import common.Model;
+import common.ShortDateTimeFormatter;
 import tetris.highScores.UserScore;
 
 import javax.swing.*;
@@ -58,8 +59,8 @@ public class HighScoresTablePanel extends JPanel implements ISubscriber {
         int idx = 0;
         for (final UserScore userScore : userScores) {
             table.setValueAt(userScore.getUserName(), idx, 0);
-            table.setValueAt(userScore.getScore(),  idx, 1);
-            table.setValueAt(userScore.getDateTime(),  idx, 2);
+            table.setValueAt(userScore.getScore(), idx, 1);
+            table.setValueAt(ShortDateTimeFormatter.format(userScore.getDateTime()),  idx, 2);
             idx++;
         }
 

@@ -26,7 +26,6 @@ public class Main {
         // Start GUI
         MainTetrisView app = new MainTetrisView(tetrisConfiguration);
 
-//        app.setVisible(true);
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
