@@ -48,7 +48,7 @@ public class MainTetrisView extends JFrame implements ISubscriber {
         highScoresTablePanel.getLabel().setFont(configuration.getFont());
         highScoresTablePanel.getLabel().setForeground(configuration.getContrastColor());
         highScoresTablePanel.getTable().setBackground(configuration.getContrastColor());
-        highScoresTablePanel.getTable().setFont(configuration.getFont());
+        highScoresTablePanel.getTable().setFont(configuration.getFont().deriveFont(10f));
         highScoresTablePanel.setVisible(false);
 
         // Add about info

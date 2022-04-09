@@ -26,20 +26,13 @@ public class UserScoresTable extends Publisher implements Model<List<UserScore>>
     }
 
     private void configureGson() {
-        JsonSerializer<LocalDateTime> serializer = new JsonSerializer<LocalDateTime>() {
-            @Override
-            public JsonElement serialize(LocalDateTime dateTime, Type type, JsonSerializationContext jsonSerializationContext) {
-                return dateTime == null ? null : new JsonPrimitive(dateTime.toString());
-            }
-        };
+        JsonSerializer<LocalDateTime> serializer =
+                (dateTime, type, jsonSerializationContext) ->
+                        dateTime == null ? null : new JsonPrimitive(dateTime.toString());
 
-        JsonDeserializer<LocalDateTime> deserializer = new JsonDeserializer<LocalDateTime>() {
-            @Override
-            public LocalDateTime deserialize(JsonElement json, Type typeOfT,
-                                    JsonDeserializationContext context) throws JsonParseException {
-                return json == null ? null : LocalDateTime.parse(json.getAsString());
-            }
-        };
+        JsonDeserializer<LocalDateTime> deserializer =
+                (json, typeOfT, context) ->
+                        json == null ? null : LocalDateTime.parse(json.getAsString());
 
         gson = new GsonBuilder()
                 .registerTypeAdapter(LocalDateTime.class, serializer)

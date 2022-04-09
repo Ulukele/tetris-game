@@ -2,6 +2,7 @@ package common;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 public class PropertiesParser {
@@ -9,7 +10,8 @@ public class PropertiesParser {
 
     public PropertiesParser(String filename) throws IOException {
         properties = new Properties();
-        properties.load(new FileReader(filename));
+        InputStream stream = ClassLoader.getSystemClassLoader().getResourceAsStream(filename);
+        properties.load(stream);
     }
 
     public PropertiesParser(Properties properties) {

@@ -12,8 +12,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        //  TODO: understand how to find resources properly
-        TetrisConfiguration tetrisConfiguration = new TetrisConfiguration("src/main/resources/configuration.properties");
+        TetrisConfiguration tetrisConfiguration = new TetrisConfiguration("configuration.properties");
         try {
             tetrisConfiguration.configure();
         } catch (LoadConfigurationException configurationException) {
@@ -26,12 +25,9 @@ public class Main {
         // Start GUI
         MainTetrisView app = new MainTetrisView(tetrisConfiguration);
 
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                JFrame.setDefaultLookAndFeelDecorated(true);
-                app.setVisible(true);
-            }
+        SwingUtilities.invokeLater(() -> {
+            JFrame.setDefaultLookAndFeelDecorated(true);
+            app.setVisible(true);
         });
 
         // Start client
