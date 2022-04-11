@@ -1,21 +1,20 @@
 package view;
 
-import Exceptions.HighScoresException;
 import common.ISubscriber;
 import common.Model;
 import common.TetrisConfiguration;
+import controller.HighScoreCommand;
 import controller.IClient;
-import controller.TetrisClient;
 import org.jetbrains.annotations.NotNull;
 import tetris.GameStates;
-import tetris.highScores.UserScore;
+import tetris.ModelsManager;
 
 import javax.swing.*;
 import java.awt.*;
-import java.time.LocalDateTime;
 
 public class MainTetrisView extends JFrame implements ISubscriber {
     private final TetrisConfiguration configuration;
+    private IClient client;
 
     private final AboutInfoPanel aboutInfoPanel;
     private final ScoreLabel scoreLabel;
@@ -34,6 +33,27 @@ public class MainTetrisView extends JFrame implements ISubscriber {
         this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+        highScoresTablePanel = new HighScoresTablePanel(configuration.getUserScoresTableRowsCount());
+        aboutInfoPanel = new AboutInfoPanel();
+        scoreLabel = new ScoreLabel();
+        stateLabel = new StateLabel();
+
+
+        // Add next block panel
+        int nextFigureBlocksSize = configuration.getBlockSize() / 2;
+        nextBlockPanel = new NextBlockPanel(
+                nextFigureBlocksSize,
+                configuration.getBackgroundColor(),
+                configuration.getContrastColor()
+        );
+        // Add matrix with blocks
+        int blockSize = configuration.getBlockSize();
+        int blocksXCount = configuration.getBlocksXCount();
+        int blocksYCount = configuration.getBlocksYCount();
+        blocksMatrix = new BlocksPanel(blocksXCount, blocksYCount, blockSize, configuration.getBackgroundColor());
+    }
+
+    public void configureLayout() {
         Container container = getContentPane();
         container.setBackground(configuration.getBackgroundColor());
         GroupLayout layout = new GroupLayout(container);
@@ -43,7 +63,6 @@ public class MainTetrisView extends JFrame implements ISubscriber {
         layout.setAutoCreateContainerGaps(true);
 
         // Add scores table
-        highScoresTablePanel = new HighScoresTablePanel(configuration.getUserScoresTableRowsCount());
         highScoresTablePanel.setBackground(configuration.getBackgroundColor().brighter());
         highScoresTablePanel.getLabel().setFont(configuration.getFont());
         highScoresTablePanel.getLabel().setForeground(configuration.getContrastColor());
@@ -52,29 +71,22 @@ public class MainTetrisView extends JFrame implements ISubscriber {
         highScoresTablePanel.setVisible(false);
 
         // Add about info
-        aboutInfoPanel = new AboutInfoPanel();
         aboutInfoPanel.getInfoLabel().setFont(configuration.getFont());
         aboutInfoPanel.getInfoLabel().setForeground(configuration.getContrastColor());
         aboutInfoPanel.setBackground(configuration.getBackgroundColor().brighter());
 
         // Add score info
-        scoreLabel = new ScoreLabel();
         scoreLabel.setFont(configuration.getFont());
         scoreLabel.setForeground(configuration.getContrastColor());
         scoreLabel.setMinimumSize(new Dimension(300, 20));
 
-        stateLabel = new StateLabel();
         stateLabel.setFont(configuration.getFont());
         stateLabel.setForeground(configuration.getContrastColor());
         stateLabel.setMinimumSize(new Dimension(0, 70));
 
         // Add next block panel
         int nextFigureBlocksSize = configuration.getBlockSize() / 2;
-        nextBlockPanel = new NextBlockPanel(
-                nextFigureBlocksSize,
-                configuration.getBackgroundColor(),
-                configuration.getContrastColor()
-        );
+
         Dimension nextBlockPanelSize = new Dimension(nextFigureBlocksSize * 4, nextFigureBlocksSize * 4);
         nextBlockPanel.setMaximumSize(nextBlockPanelSize);
         nextBlockPanel.setMinimumSize(nextBlockPanelSize);
@@ -83,7 +95,6 @@ public class MainTetrisView extends JFrame implements ISubscriber {
         int blockSize = configuration.getBlockSize();
         int blocksXCount = configuration.getBlocksXCount();
         int blocksYCount = configuration.getBlocksYCount();
-        blocksMatrix = new BlocksPanel(blocksXCount, blocksYCount, blockSize, configuration.getBackgroundColor());
         blocksMatrix.setMinimumSize(new Dimension(blocksXCount * blockSize, blocksYCount * blockSize));
 
         layout.setHorizontalGroup(
@@ -113,42 +124,40 @@ public class MainTetrisView extends JFrame implements ISubscriber {
                         )
         );
 
-        // Connect models
-        connectMenu();
-        connectModels();
-        loadHighScores();
-
-        // Finish layout configuration
         pack();
     }
 
-    private void loadHighScores() {
+    private void tryToLoadHighScores() {
         try {
-            configuration.getUsersScoresTable().initFromFile();
-        } catch (HighScoresException highScoresException) {
+            client.executeUnsafe(HighScoreCommand.LoadHighScores);
+        } catch (Exception exception) {
             JOptionPane.showMessageDialog(this, "Failed to load high-scores");
         }
     }
 
-    private void connectMenu() {
-        IClient client = new TetrisClient(configuration.getTetrisGame());
+    public void connectControl(IClient tetrisClient) {
+        client = tetrisClient;
         JMenuBar menuBar = new JMenuBar();
-        menuBar.add(new GameMenu(client));
+        menuBar.add(new GameMenu(tetrisClient));
         setJMenuBar(menuBar);
+
+        TetrisKeyListener tetrisKeyListener = new TetrisKeyListener(tetrisClient);
+        addKeyListener(tetrisKeyListener);
     }
 
-    private void connectModel() {
-        gameStatesModel = configuration.getGameState();
+    private void connectModel(Model<GameStates> gameStatesModel) {
+        this.gameStatesModel = gameStatesModel;
         gameStatesModel.addSubscriber(this);
     }
 
-    private void connectModels() {
-        blocksMatrix.setBlocksMatrixModel(configuration.getGameSpace());
-        scoreLabel.setScoreModel(configuration.getScore());
-        nextBlockPanel.setNextFigureModel(configuration.getActiveFigure());
-        stateLabel.setGameStatesModel(configuration.getGameState());
-        highScoresTablePanel.setUserScoresListModel(configuration.getUsersScoresTable());
-        connectModel();
+    public void connectModels(ModelsManager modelsManager) {
+        blocksMatrix.setBlocksMatrixModel(modelsManager.getGameSpace());
+        scoreLabel.setScoreModel(modelsManager.getScoreCounter());
+        nextBlockPanel.setNextFigureModel(modelsManager.getActiveFigure());
+        stateLabel.setGameStatesModel(modelsManager.getGameState());
+        highScoresTablePanel.setUserScoresListModel(modelsManager.getUserScoresTable());
+        connectModel(modelsManager.getGameState());
+        tryToLoadHighScores();
     }
 
     @Override
@@ -168,14 +177,13 @@ public class MainTetrisView extends JFrame implements ISubscriber {
     }
 
     private void registerResult() {
-        String userName = JOptionPane.showInputDialog("Enter your name:");
-        int score = configuration.getScore().getScore();
-        LocalDateTime dateTime = LocalDateTime.now();
+        if (client == null) return;
 
-        UserScore userScore = new UserScore(userName, score, dateTime);
+        String userName = JOptionPane.showInputDialog("Enter your name:");
+
         try {
-            configuration.getUsersScoresTable().addUserScore(userScore);
-        } catch (HighScoresException highScoresException) {
+            client.executeUnsafe(HighScoreCommand.SaveScore, userName);
+        } catch (Exception exception) {
             JOptionPane.showMessageDialog(this, "Can't save result");
         }
     }

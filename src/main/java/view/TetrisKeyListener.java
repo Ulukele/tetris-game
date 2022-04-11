@@ -1,7 +1,8 @@
 package view;
 
-import controller.Command;
+import controller.MovementCommand;
 import controller.IClient;
+import controller.StateCommand;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -18,12 +19,12 @@ public class TetrisKeyListener implements KeyListener {
     @Override
     public void keyTyped(KeyEvent e) {
         switch (e.getKeyChar()) {
-            case ('w') -> tetrisClient.execute(Command.Rotate);
-            case ('a') -> tetrisClient.execute(Command.Left);
-            case ('s') -> tetrisClient.execute(Command.Down);
-            case ('d') -> tetrisClient.execute(Command.Right);
-            case ('r') -> tetrisClient.execute(Command.NewGame);
-            case('\n') -> tetrisClient.execute(Command.SwitchStopContinue);
+            case ('w') -> tetrisClient.execute(MovementCommand.Rotate);
+            case ('a') -> tetrisClient.execute(MovementCommand.Left);
+            case ('s') -> tetrisClient.execute(MovementCommand.Down);
+            case ('d') -> tetrisClient.execute(MovementCommand.Right);
+            case ('r') -> tetrisClient.execute(StateCommand.NewGame);
+            case('\n') -> tetrisClient.execute(StateCommand.SwitchStopContinue);
         }
     }
 

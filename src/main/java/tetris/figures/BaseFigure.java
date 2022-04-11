@@ -7,12 +7,10 @@ import tetris.common.Coordinate;
 public class BaseFigure implements Figure {
     private final Coordinate centre;
     private final Block[] blocks;
-    private final BlockColor color;
 
     public BaseFigure(Coordinate centre, Block[] blocks, BlockColor color) {
         this.centre = centre;
         this.blocks = blocks;
-        this.color = color;
         for (final Block block : blocks) {
             block.setColor(color);
         }
@@ -49,9 +47,4 @@ public class BaseFigure implements Figure {
 
     @Override
     public Block[] getBlocks() { return blocks; }
-
-    @Override
-    public BlockColor getColor() {
-        return color;
-    }
 }

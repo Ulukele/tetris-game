@@ -9,5 +9,4 @@ public interface Figure {
     void rotate(boolean directionClockwise);
     void shift(int x, int y);
     Block[] getBlocks();
-    BlockColor getColor();
 }

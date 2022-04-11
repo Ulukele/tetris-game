@@ -1,8 +1,6 @@
 package common;
 
 import Exceptions.LoadConfigurationException;
-import tetris.*;
-import tetris.highScores.UserScoresTable;
 
 import java.awt.*;
 import java.io.IOException;
@@ -17,15 +15,7 @@ public class TetrisConfiguration {
     private int blocksXCount;
     private int blocksYCount;
     private int blockSize;
-
-    private GameSpace gameSpace;
-    private ScoreCounter scoreCounter;
-    private TetrisEngine tetrisEngine;
-    private ActiveFigure activeFigure;
-    private GameState gameState;
-
-    private UserScoresTable userScoresTable;
-    private final int userScoresTableRowsCount = 10;
+    private int userScoresTableRowsCount;
 
     private Font font = new Font("Roboto", Font.BOLD, 25);
     private final Color backgroundColor = new Color(50, 50, 60);
@@ -73,6 +63,7 @@ public class TetrisConfiguration {
         blocksXCount = 10;
         blocksYCount = 20;
         blockSize = 40;
+        userScoresTableRowsCount = 10;
     }
 
     private void configureFromProperties() throws LoadConfigurationException {
@@ -80,6 +71,7 @@ public class TetrisConfiguration {
             blocksXCount = propertiesParser.getInteger("BLOCKS_X_COUNT");
             blocksYCount = propertiesParser.getInteger("BLOCKS_Y_COUNT");
             blockSize = propertiesParser.getInteger("BLOCK_SIZE");
+            userScoresTableRowsCount = propertiesParser.getInteger("HIGH_SCORE_ROWS_COUNT");
         } catch (NullPointerException | NumberFormatException exception) {
             configureFromDefaults();
             throw new LoadConfigurationException("Unable to parse configuration file, use defaults");
@@ -96,48 +88,6 @@ public class TetrisConfiguration {
 
     public int getBlockSize() {
         return blockSize;
-    }
-
-    public GameSpace getGameSpace() {
-        if (gameSpace == null) {
-            gameSpace = new GameSpace(blocksXCount, blocksYCount);
-        }
-        return gameSpace;
-    }
-
-    public ScoreCounter getScore() {
-        if (scoreCounter == null) {
-            scoreCounter = new ScoreCounter();
-        }
-        return scoreCounter;
-    }
-
-    public GameState getGameState() {
-        if (gameState == null) {
-            gameState = new GameState(GameStates.Pause);
-        }
-        return gameState;
-    }
-
-    public TetrisEngine getTetrisGame() {
-        if (tetrisEngine == null) {
-            tetrisEngine = new TetrisEngine(getGameSpace(), getScore(), getGameState());
-        }
-        return tetrisEngine;
-    }
-
-    public ActiveFigure getActiveFigure() {
-        if (activeFigure == null) {
-            activeFigure = getGameSpace().getActiveFigure();
-        }
-        return activeFigure;
-    }
-
-    public UserScoresTable getUsersScoresTable() {
-        if (userScoresTable == null) {
-            userScoresTable = new UserScoresTable(userScoresTableRowsCount);
-        }
-        return userScoresTable;
     }
 
     public int getUserScoresTableRowsCount() {

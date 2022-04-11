@@ -1,5 +1,11 @@
 package tetris;
 
+import Exceptions.HighScoresException;
+import tetris.highScores.UserScore;
+import tetris.highScores.UserScoresTable;
+import view.HighScoresTablePanel;
+
+import java.time.LocalDateTime;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -12,15 +18,18 @@ public class TetrisEngine {
     private final GameSpace gameSpace;
     private final ScoreCounter scoreCounter;
     private final GameState state;
+    private final UserScoresTable userScoresTable;
 
     public TetrisEngine(
             GameSpace gameSpace,
             ScoreCounter scoreCounter,
-            GameState gameState
+            GameState gameState,
+            UserScoresTable userScoresTable
     ) {
         this.gameSpace = gameSpace;
         this.scoreCounter = scoreCounter;
         this.state = gameState;
+        this.userScoresTable = userScoresTable;
         Timer timer = new Timer();
         TimerTask timerTask = new TimerTask() {
             @Override
@@ -92,5 +101,16 @@ public class TetrisEngine {
 
     public void setHighScoresState() {
         state.setState(GameStates.HighScores);
+    }
+
+    public void loadHighScores() throws HighScoresException {
+        userScoresTable.initFromFile();
+    }
+
+    public void saveResult(String userName) throws HighScoresException {
+        int score = scoreCounter.getScore();
+        LocalDateTime dateTime = LocalDateTime.now();
+        UserScore userScore = new UserScore(userName, score, dateTime);
+        userScoresTable.addUserScore(userScore);
     }
 }
