@@ -1,12 +1,12 @@
 package tetris.highScores;
 
-import Exceptions.HighScoresException;
+import exceptions.DumpWorkerException;
+import exceptions.HighScoresException;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import common.Model;
 import common.Publisher;
 
-import java.io.IOException;
 import java.lang.reflect.Type;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -47,7 +47,7 @@ public class UserScoresTable extends Publisher implements Model<List<UserScore>>
             List<UserScore> userScoresFromFile = gson.fromJson(dumpData, type);
 
             if (userScoresFromFile != null) usersScoresList = userScoresFromFile;
-        } catch (IOException ioException) {
+        } catch (DumpWorkerException dumpWorkerException) {
             throw new HighScoresException();
         }
         publishNotify();
@@ -64,7 +64,7 @@ public class UserScoresTable extends Publisher implements Model<List<UserScore>>
 
         try {
             dumpWorker.writeDump(dataDump);
-        } catch (IOException ioException) {
+        } catch (DumpWorkerException dumpWorkerException) {
             throw new HighScoresException();
         }
     }

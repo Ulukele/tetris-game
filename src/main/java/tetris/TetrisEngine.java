@@ -1,9 +1,8 @@
 package tetris;
 
-import Exceptions.HighScoresException;
+import exceptions.HighScoresException;
 import tetris.highScores.UserScore;
 import tetris.highScores.UserScoresTable;
-import view.HighScoresTablePanel;
 
 import java.time.LocalDateTime;
 import java.util.Timer;

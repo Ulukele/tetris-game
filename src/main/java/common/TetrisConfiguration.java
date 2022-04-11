@@ -1,6 +1,6 @@
 package common;
 
-import Exceptions.LoadConfigurationException;
+import exceptions.LoadConfigurationException;
 
 import java.awt.*;
 import java.io.IOException;

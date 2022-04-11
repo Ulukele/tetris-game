@@ -1,5 +1,7 @@
 package tetris.highScores;
 
+import exceptions.DumpWorkerException;
+
 import java.io.*;
 import java.net.URL;
 
@@ -10,21 +12,21 @@ public class DumpWorker {
         this.filename = filename;
     }
 
-    public void writeDump(String dumpData) throws IOException {
+    public void writeDump(String dumpData) throws DumpWorkerException {
         URL resource = getClass().getClassLoader().getResource(filename);
-        if (resource == null) throw new IOException();
+        if (resource == null) throw new DumpWorkerException();
 
         String absolutePath = resource.getFile();
-        try ( Writer writer = new FileWriter(absolutePath)) {
+        try (Writer writer = new FileWriter(absolutePath)) {
             writer.write(dumpData);
         } catch (IOException ioException) {
-            throw new IOException();
+            throw new DumpWorkerException();
         }
     }
 
-    public String readDump() throws IOException {
+    public String readDump() throws DumpWorkerException {
         URL resource = getClass().getClassLoader().getResource(filename);
-        if (resource == null) throw new IOException();
+        if (resource == null) throw new DumpWorkerException();
         String absolutePath = resource.getFile();
 
         try (Reader reader = new BufferedReader(new FileReader(absolutePath))) {
@@ -40,7 +42,7 @@ public class DumpWorker {
             }
             return sb.toString();
         } catch (IOException ioException) {
-            throw new IOException();
+            throw new DumpWorkerException();
         }
     }
 }

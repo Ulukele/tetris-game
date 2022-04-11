@@ -5,7 +5,6 @@ import common.Model;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
-import java.awt.*;
 
 public class ScoreLabel extends JLabel implements ISubscriber {
 

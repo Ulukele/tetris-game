@@ -1,4 +1,4 @@
-import Exceptions.LoadConfigurationException;
+import exceptions.LoadConfigurationException;
 import controller.TetrisClient;
 import tetris.ModelsManager;
 import tetris.TetrisEngine;

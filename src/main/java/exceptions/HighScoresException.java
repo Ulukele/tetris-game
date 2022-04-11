@@ -1,4 +1,4 @@
-package Exceptions;
+package exceptions;
 
 public class HighScoresException extends Exception {
     public HighScoresException() {

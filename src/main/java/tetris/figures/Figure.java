@@ -1,7 +1,6 @@
 package tetris.figures;
 
 import tetris.common.Block;
-import tetris.common.BlockColor;
 
 public interface Figure {
     void setPos(int x, int y);

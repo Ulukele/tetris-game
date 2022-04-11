@@ -6,7 +6,6 @@ import tetris.GameStates;
 import view.common.MultiLineLabel;
 
 import javax.swing.*;
-import java.awt.*;
 
 public class StateLabel extends MultiLineLabel implements ISubscriber {
     private Model<GameStates> gameStatesModel;

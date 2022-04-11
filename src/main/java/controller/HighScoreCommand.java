@@ -1,6 +1,6 @@
 package controller;
 
-import Exceptions.HighScoresException;
+import exceptions.HighScoresException;
 import tetris.TetrisEngine;
 
 public enum HighScoreCommand implements IUnsafeCommand{

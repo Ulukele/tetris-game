@@ -1,6 +1,5 @@
 package tetris;
 
-import common.IPublisher;
 import common.Model;
 import common.Publisher;
 import tetris.common.Block;
