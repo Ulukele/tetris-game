@@ -1,0 +1,11 @@
+<paths>
+    <dir path="tetris.figures.factory">
+        <file name="OFigureCreator"/>
+        <file name="IFigureCreator"/>
+        <file name="LFigureCreator"/>
+        <file name="JFigureCreator"/>
+        <file name="SFigureCreator"/>
+        <file name="ZFigureCreator"/>
+        <file name="TFigureCreator"/>
+    </dir>
+</paths>

@@ -1,5 +1,6 @@
 import exceptions.LoadConfigurationException;
 import controller.TetrisClient;
+import exceptions.ModelsException;
 import tetris.ModelsManager;
 import tetris.TetrisEngine;
 import common.TetrisConfiguration;
@@ -13,13 +14,15 @@ public class Main {
     public static void main(String[] args) {
 
         TetrisConfiguration tetrisConfiguration = new TetrisConfiguration("configuration.properties");
+        ModelsManager modelsManager;
         try {
             tetrisConfiguration.configure();
-        } catch (LoadConfigurationException configurationException) {
-            configurationException.printStackTrace();
+            modelsManager = new ModelsManager(tetrisConfiguration);
+        } catch (LoadConfigurationException | ModelsException exception) {
+            exception.printStackTrace();
+            return;
         }
 
-        ModelsManager modelsManager = new ModelsManager(tetrisConfiguration);
 
         // Get game instance
         TetrisEngine tetrisEngine = modelsManager.getTetrisEngine();

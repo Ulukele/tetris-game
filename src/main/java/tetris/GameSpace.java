@@ -2,6 +2,7 @@ package tetris;
 
 import common.Model;
 import common.Publisher;
+import exceptions.ActiveFigureException;
 import org.jetbrains.annotations.NotNull;
 import tetris.common.Block;
 import tetris.common.BlockColor;
@@ -17,7 +18,7 @@ public class GameSpace extends Publisher implements Model<BlockColor[][]> {
     private final BlocksMatrix blocksMatrix;
     private final ActiveFigure activeFigure;
 
-    public GameSpace(int width, int height) {
+    public GameSpace(int width, int height) throws ActiveFigureException {
         blocksMatrix = new BlocksMatrix(width, height);
         activeFigure = new ActiveFigure();
         setActiveFigureStartPosition();

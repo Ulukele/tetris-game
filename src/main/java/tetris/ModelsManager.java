@@ -2,6 +2,8 @@ package tetris;
 
 import common.Model;
 import common.TetrisConfiguration;
+import exceptions.ActiveFigureException;
+import exceptions.ModelsException;
 import tetris.common.Block;
 import tetris.common.BlockColor;
 import tetris.highScores.UserScore;
@@ -17,8 +19,12 @@ public class ModelsManager {
     private final GameState gameState;
     private final UserScoresTable userScoresTable;
 
-    public ModelsManager(TetrisConfiguration configuration) {
-        gameSpace = new GameSpace(configuration.getBlocksXCount(), configuration.getBlocksYCount());
+    public ModelsManager(TetrisConfiguration configuration) throws ModelsException {
+        try {
+            gameSpace = new GameSpace(configuration.getBlocksXCount(), configuration.getBlocksYCount());
+        } catch (ActiveFigureException activeFigureException) {
+            throw new ModelsException("Problems with models");
+        }
         scoreCounter = new ScoreCounter();
         gameState = new GameState(GameStates.Pause);
         activeFigure = gameSpace.getActiveFigure();
